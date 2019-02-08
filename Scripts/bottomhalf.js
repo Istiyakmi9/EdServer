@@ -57,6 +57,8 @@ module.controller('BhController', function ($scope, $ajax, $local) {
         });
     }
 
+    // Local storage data for page level.
+
     $scope.StoreToLocalStorage = function (ServerData) {
         var Data = JSON.parse(ServerData);
         if (Data != null && Data != '' && typeof Data.Classes != 'undefined' && typeof Data.TotalCount != 'undefined') {
@@ -69,7 +71,8 @@ module.controller('BhController', function ($scope, $ajax, $local) {
             var index = 0;
             while (index < Classes.length) {
                 if (!isNaN(parseInt(Classes[index].Class))) {
-                    if (DistinctClasses.indexOf(parseInt(Classes[index].Class.trim())) == -1 && HigherClasses.indexOf(parseInt(Classes[index].Class.trim())) == -1) {
+                    if (DistinctClasses.indexOf(parseInt(Classes[index].Class.trim())) == -1 &&
+                        HigherClasses.indexOf(parseInt(Classes[index].Class.trim())) == -1) {
                         if (parseInt(Classes[index].Class) < 10)
                             DistinctClasses.push(parseInt(Classes[index].Class));
                         else
@@ -82,7 +85,6 @@ module.controller('BhController', function ($scope, $ajax, $local) {
                 }
                 index++;
             }
-
             HigherClasses = HigherClasses.sort();
             DistinctClasses = DistinctClasses.sort();
             DistinctClasses = DistinctClasses.concat(HigherClasses);
