@@ -1,0 +1,272 @@
+﻿
+@{
+    ViewBag.Title = "Attendence";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/attendence.css" rel="stylesheet" />
+<div class="right_col" role="main" ng-controller="attendenceCtrl">
+    <div class="" id="attendence-table">
+        <div class="clearfix"></div>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel x_panel-plr2">
+                <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#tab_content1" id="attendence-filter" role="tab" data-toggle="tab" aria-expanded="true">Home</a>
+                        </li>
+                        <li role="presentation" class="">
+                            <a href="#tab_content2" role="tab" id="attendence-all" data-toggle="tab" aria-expanded="false">Class Attendence Report</a>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="attendence-filter">
+                            <div class="x_content no-padding">
+                                <form>
+                                    <div class="well-date">
+                                        <div class="col-md-9 col-xs-12">
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                Calendar <small>Pick month & year.</small>
+                                                <div class="form-group">
+                                                    <div class="input-group date" id="calendar-monthyearpicker" ng-click="EnableField()">
+                                                        <input id="date-value" type="text" class="form-control" placeholder="Pick month" />
+                                                        <span id="date-icon" class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                Class
+                                                <div class="form-group">
+                                                    <select class="form-control" ng-model="selectedClass" ng-click="EnableField()" ng-change="BindSection()" id="Class" name="Class">
+                                                        <option value="">Class</option>
+                                                        <option ng-repeat="item in ClassDetail" value="{{item}}">{{item}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                Section
+                                                <div class="form-group">
+                                                    <select class="form-control" id="section" ng-click="EnableField()" ng-change="GetClassDetail()" ng-model="ClassDetailUid" name="section" disabled>
+                                                        <option value="">Section</option>
+                                                        <option ng-repeat="sec in SectionDetail" value="{{sec.ClassDetailId}}">{{sec.Section}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-xs-12">
+                                            <div class="col-md-6 col-xs-12 clear-btn-dv form-group">
+                                                <button class="btn btn-default btn-block" ng-click="ClearSearch()">
+                                                    <i class="fa fa-undo"></i>&nbsp;Reset
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6 col-xs-12 filter-btn-dv form-group">
+                                                <button class="btn btn-primary btn-block" ng-click="FilterByMonthReport()">
+                                                    <i class="fa fa-filter"></i>&nbsp;Filter
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <div class="x_content" id="default-content">
+                                    <div class="table-responsive">
+                                        <table style="overflow: hidden;" class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+                                                    <th class="column-title" colspan="8">User table header </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="overflow: hidden;">
+                                                <tr style="background-color: #fff !important;">
+                                                    <td colspan="8">
+                                                        <div class="demotd">
+                                                            DAILY ATTENDENCE REPORT BY MONTH
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="dn">
+                                    <div id="AttendenceDetailContent">
+                                        <ul class="list-group list-unstyled">
+                                            <li class="list-group-item">Full Name</li>
+                                            <li class="list-group-item">Registration No</li>
+                                            <li class="list-group-item">Roll No</li>
+                                            <li class="list-group-item">Mobile No</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12 no-padding" id="tblattedence" style="display: none;">
+                                    <div id="table">
+                                        <div class="d-flex t-scrollbar t-scroll-color d-table-head center">
+                                            <div class="first-cell th-cell head-title">Name</div>
+                                            <div class="w-5 th-cell" ng-repeat="cal in MonthDate">
+                                                <small>{{cal.day}}</small> <br />
+                                                {{cal.date}}
+                                            </div>
+                                        </div>
+                                        <div class="center t-scrollbar t-h">
+                                            <div class="d-flex t-body" ng-repeat="record in attendence track by $index" ng-class="{'t-striped': $odd}">
+                                                <div class="t-body-col first-cell">
+                                                    <a href="Javascript:void(0)" name="studentNamePopover" role="button" title="{{record.StudenName}} Detail" data-toggle="popover" data-trigger="focus">
+                                                        <div class="t-content" name="studentname">
+                                                            {{record.StudenName}}
+                                                        </div>
+                                                    </a>
+                                                    <input type="hidden" name="attendenceId" value="{{record.AttendenceId}}" />
+                                                    <input type="hidden" name="studentUid" value="{{record.studentUid}}" />
+                                                    <input type="hidden" name="studentUid" value="{{record.AbsentOn}}" />
+                                                </div>
+                                                <div class="w-5 t-body-col" ng-repeat="data in AttendenceData track by $index">
+                                                    <div ng-switch="data">
+                                                        <div class="t-content success" ng-switch-when="1">
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                        </div>
+                                                        <div class="t-content danger text-info" ng-switch-default>
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-md4 col-sm-4 col-xs-4 no-padding">
+                                            <table class="attedence v-fixed" style="width: 98%;" id="left-content">
+                                                <thead class="atthead">
+                                                    <tr>
+                                                        <th>
+                                                            <div style="width: 180px;">Student <br />Name</div>
+                                                        </th>
+                                                        <th>
+                                                            <div style="width: 80px;">Abs%<br />{{StartMonthName}}-{{EndMonthName}}</div>
+                                                        </th>
+                                                        <th>
+                                                            <div style="width: 80px;">Days</div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="attbody" style="overflow:hidden;">
+                                                    <tr ng-repeat="record in RecordInfo track by $index" ng-class="{'even': $even}">
+                                                        <td>
+                                                            <div style="width: 180px;">{{record.StudenName}}</div>
+                                                            <input type="hidden" name="attendenceId" value="{{record.AttendenceId}}" />
+                                                            <input type="hidden" name="studentUid" value="{{record.studentUid}}" />
+                                                        </td>
+                                                        <td>
+                                                            <div style="width: 80px;">{{record.TotalAbsentTillDate}}</div>
+                                                        </td>
+                                                        <td style="border-right: none;">
+                                                            <div style="width: 80px;">{{record.TotalWorkingDaysTillDate}}</div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>*@
+                                    @*<div class="col-md-8 col-sm-8 col-xs-8 no-padding" style="margin-left: -12px;padding-left: 0px;">
+                                            <table id="tbl-content" class="attedence">
+                                                <thead class="atthead">
+                                                    <tr>
+                                                        <th ng-repeat="days in rowset track by $index" ng-class="{'last-section-hd': $last}">
+                                                            <div>{{days.day}} <br /> {{days.date}}</div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="attbody">
+                                                    <tr ng-repeat="record in RecordInfo track by $index" ng-class="{'even': $even}">
+                                                        <td ng-repeat="cell in cellset track by $index" ng-class="{'last-section': $last}">
+                                                            {{cell}}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="attendence-all">
+                            <div id="resultlist" style="margin-bottom: 10px;" class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_content">
+                                    <div class="row" style="border-bottom: 1px solid #d9d9d9;">
+                                        <div class="col-sm-5">
+                                            <div class="dataTables_info" id="datatable_info" role="status" aria-live="polite">
+                                                Showing {{fromCount}} to {{toCount}} of {{recordDetail.total}} entries
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <div class="dataTables_paginate paging_simple_numbers" id="paging-dv">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- start project list -->
+                                    <table class="table table-striped projects" style="margin-bottom: -10px;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 1%">RollNo</th>
+                                                <th style="width: 20%">Student Name</th>
+                                                <th>Student Detail</th>
+                                                <th>Percentage Progress</th>
+                                                <th>Class Teacher</th>
+                                                <th>#Edit</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="scrollable-section">
+                                        <table class="table table-striped projects" style="margin-bottom: -10px;">
+                                            <tbody>
+                                                <tr ng-repeat="record in TableResultSet">
+                                                    <td>{{record.Rollno}}</td>
+                                                    <td>
+                                                        <a>{{record.FullName}}</a>
+                                                        <br />
+                                                        <small>{{record.RegistrationNo}}</small>
+                                                    </td>
+                                                    <td style="width: 22%;">
+                                                        Reg No. {{record.RegistrationNo}} <br /> Class/Sec = {{record.Class}}/{{record.Section}}
+                                                    </td>
+                                                    <td class="project_progress">
+                                                        <div class="progress progress_sm">
+                                                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
+                                                        </div>
+                                                        <small>77% Complete</small>
+                                                    </td>
+                                                    <td>
+                                                        {{record.TeacherName}}
+                                                    </td>
+                                                    <td style="width: 10%;">
+                                                        <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- end project list -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/attendence.js"></script>
+<script type="text/javascript">
+
+    $('#tbl-content').on('scroll', function () {
+        $("#tbl-content > *").width($("#tbl-content").width() + $("#tbl-content").scrollLeft());
+    });
+
+    $('#tbl-content tbody').on('scroll', function (e) {
+        $("#left-content tbody").css({ 'margin-top': -1 * $('#tbl-content tbody').scrollTop() });
+    });
+    var Data = @Html.Raw(@ViewBag.AttendenceSet);
+</script>

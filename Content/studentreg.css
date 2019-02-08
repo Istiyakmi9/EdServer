@@ -1,0 +1,130 @@
+﻿.parent-dv {
+    display: block;
+    width: 100%;
+    min-height: 180px;
+    margin-top: 34px;
+}
+
+input.n-flat {
+    zoom: 1.4;
+    margin-top: 1px;
+}
+
+.sel-parent {
+    position: relative;
+    top: 3px;
+    zoom: 1.4;
+    margin-top: 0px;
+}
+
+.perient-sel-dv {
+    display: block;
+    min-height: 156px;
+    text-align: center;
+    padding-top: 30px;
+    background-color: #f8f7f7;
+    margin-top: 25px;
+    height: auto;
+}
+
+.p-title {
+    font-size: 25px;
+}
+
+.new-setting {
+    background-color: #f8f7f7 !important;
+    border-bottom: none !important;
+    height: 50px;
+}
+
+    .new-setting h2 {
+        margin-top: 14px !important;
+        padding-left: 10px !important;
+    }
+
+.perient-existing-dv {
+    margin-top: 5%;
+    margin-left: 10%;
+}
+
+.filterdd {
+    width: 72.5%;
+    position: absolute;
+    z-index: 10;
+    background-color: #fff;
+    min-height: 60px;
+    margin-left: 24.2%;
+    margin-top: -10px;
+    border: 1px solid #d9d9d9;
+    max-height: 160px;
+    overflow-y: scroll;
+}
+
+.filtertxt {
+    width: 30%;
+    text-align: center;
+}
+
+.new-group {
+    background-color: #eee;
+    height: 70px;
+    padding-top: 18px;
+}
+
+.studlist table {
+    border: 1px solid #d9d9d9;
+    width: 100%;
+    background-color: #fff;
+}
+
+.studlist tr {
+    border: 1px solid #d9d9d9;
+}
+
+.studlist td, th {
+    padding: 5px 5px;
+    border: 1px solid #d9d9d9;
+}
+
+.quickfilterdd {
+    width: calc(100% - 20px);
+    position: absolute;
+    z-index: 10;
+    background-color: #fff;
+    min-height: 60px;
+    max-height: 160px;
+    margin-top: -6px;
+}
+
+.studlist tbody > tr:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.studlist thead > tr {
+    background-color: #eff2f5;
+    color: #444;
+}
+
+.loaderdv {
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    text-align: center;
+    line-height: 60px;
+}
+
+    .loaderdv img {
+        width: 24px;
+        display: inline-block;
+    }
+
+.quickparent-dv {
+    display: block;
+    width: 100%;
+    min-height: 110px;
+    margin-top: 34px;
+}
+
+.quickperient-existing-dv {
+    margin-top: 5%;
+}

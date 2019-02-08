@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewBag.Title = "Viewdroppickzone";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/uploadexcel.css" rel="stylesheet" />
+<script src="~/Scripts/xlsx.full.min.js"></script>
+<script src="~/Scripts/jszip.js"></script>
+<div class="right_col" role="main" ng-controller="uploadexcel">
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="notifier ui-pnotify dark ui-pnotify-fade-normal ui-pnotify-in ui-pnotify-fade-in ui-pnotify-move" aria-live="assertive"
+             aria-role="alertdialog" style="display: none;">
+            <div class="alert ui-pnotify-container alert-info ui-pnotify-shadow" role="alert" style="min-height: 16px;">
+                <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close" style="cursor: pointer; visibility: hidden; display: none;">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </div>
+                <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="true" tabindex="0" title="Unstick" style="cursor: pointer; visibility: hidden; display: none;">
+                    <span class="glyphicon glyphicon-play" aria-pressed="true"></span>
+                </div>
+                <div class="ui-pnotify-icon">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                </div><h4 class="ui-pnotify-title">PNotify</h4>
+                <div class="ui-pnotify-text" aria-role="alert">
+                    Welcome. Below is the sample screen shot for excel sheet, that how to fill. Click
+                    DOWNLOAD ICON to download sample sheet.
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-bars"></i> Tabs <small>Float left</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#">Settings 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content" id="dropcontainer">
+                        <a class="downloadanc" id="andDownloadxlsx" href="../Excel/ClassMaster.xlsx" ng-click="UploadExcel()">
+                            Click to download sample &nbsp;
+                            <img src="~/images/excel.png" class="downloadIcon" />
+                        </a>
+                        <div class="" id="uploadsec" role="tabpanel" data-example-id="togglable-tabs">
+                            <ul id="uploadTabs" class="nav nav-tabs bar_tabs" role="tablist">
+                                <li role="presentation" class="active" name="classmasterdata" file="ClassMaster" ng-click="InitTabs()">
+                                    <a href="#tab_content1" id="master-tab" role="tab" data-toggle="tab" aria-expanded="true">Class Master Data</a>
+                                </li>
+                                <li role="presentation" name="facultydata" class="" file="Faculty" ng-click="InitTabs()">
+                                    <a href="#tab_content2" role="tab" id="faculty-tab" data-toggle="tab" aria-expanded="false">Faculty Detail</a>
+                                </li>
+                                <li role="presentation" name="studentdetail" file="StudentDetail" class="" ng-click="InitTabs()">
+                                    <a href="#tab_content3" role="tab" id="driver-tab2" data-toggle="tab" aria-expanded="false">Student & Parent</a>
+                                </li>
+                                <li role="presentation" name="studentattendencedata" file="studentattendence" class="" ng-click="InitTabs()">
+                                    <a href="#tab_content4" role="tab" id="attendence-tab2" data-toggle="tab" aria-expanded="false">Student Attendence</a>
+                                </li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                                    <div id="classmasterdata" class="col-md-12 col-sm-12 col-xs-12">
+                                        <div name="imgdv" class="show-case-dv">
+                                            <img src="~/Excel/ClassMaster.png" class="show-case" />
+                                        </div>
+                                        <div name="ifilezone" class="ifilezone">
+                                            <span style="color: darkgray;margin-top: 30px;display: block;">
+                                                Drop files here.
+                                            </span>
+                                            <div class="col-md-12 col-sm-12 col-xs-12" style="display: none;" name="uploading">
+                                                <img src="~/images/ExcelFile.png" />
+                                                <div class="filetitle">File: <div name="filename" style="display: inline-block !important;"></div></div>
+                                                <div>
+                                                    <div>File size: &nbsp; <div name="filesize" style="display: inline-block !important;"></div>KB</div>
+                                                    <div>No. of record(s): &nbsp; <div name="noofrecords" style="display: inline-block !important;"></div></div>
+                                                    <div>Uploading date: &nbsp; <div name="uploadingdatetime" style="display: inline-block !important;"></div></div>
+                                                </div>
+                                                <div>
+                                                    <button type="button" class="btn btn-primary" style="margin-top: 20px;" ng-click="uploadClassDetail()">
+                                                        Upload
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                                    <div id="facultydata" class="col-md-12 col-sm-12 col-xs-12">
+                                        <div name="imgdv" class="show-case-dv">
+                                            <img src="~/Excel/Faculty.png" class="show-case" />
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div name="ifilezone" class="ifilezone">
+                                                <span style="color: darkgray">
+                                                    Drop files here.
+                                                </span>
+                                                <div class="col-md-12 col-sm-12 col-xs-12" style="display: none;" name="uploading">
+                                                    <img src="~/images/ExcelFile.png" />
+                                                    <div class="filetitle">File: <div name="filename" style="display: inline-block !important;"></div></div>
+                                                    <div>
+                                                        <div>File size: &nbsp; <div name="filesize" style="display: inline-block !important;"></div>KB</div>
+                                                        <div>No. of record(s): &nbsp; <div name="noofrecords" style="display: inline-block !important;"></div></div>
+                                                        <div>Uploading date: &nbsp; <div name="uploadingdatetime" style="display: inline-block !important;"></div></div>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-primary" style="margin-top: 20px;" ng-click="uploadFacultyDetail()">
+                                                            Upload
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                                    <div id="studentdetail" class="col-md-12 col-sm-12 col-xs-12">
+                                        <div name="imgdv" class="show-case-dv">
+                                            <img src="~/Excel/studentdetail.png" class="show-case" />
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div name="ifilezone" class="ifilezone">
+                                                <span style="color: darkgray">
+                                                    Drop files here.
+                                                </span>
+                                                <div class="col-md-12 col-sm-12 col-xs-12" style="display: none;" name="uploading">
+                                                    <img src="~/images/ExcelFile.png" />
+                                                    <div class="filetitle">File: <div name="filename" style="display: inline-block !important;"></div></div>
+                                                    <div>
+                                                        <div>File size: &nbsp; <div name="filesize" style="display: inline-block !important;"></div>KB</div>
+                                                        <div>No. of record(s): &nbsp; <div name="noofrecords" style="display: inline-block !important;"></div></div>
+                                                        <div>Uploading date: &nbsp; <div name="uploadingdatetime" style="display: inline-block !important;"></div></div>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-primary" style="margin-top: 20px;" ng-click="uploadStudentDetail()">
+                                                            Upload
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_content4" aria-labelledby="attendence-tab">
+                                    <div id="studentattendencedata" class="col-md-12 col-sm-12 col-xs-12">
+                                        <div name="imgdv" class="show-case-dv">
+                                            <img src="~/Excel/attendence.png" class="show-case" />
+                                        </div>
+                                        <p id="errorSpanMsg" style="width: 100%; display: none; text-align:center; color: red;">
+                                            Class and Section is mandatory. Please select and Class and Section first.
+                                        </p>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div name="ifilezone" class="ifilezone" ng-click="DoPreProcessing()">
+                                                <span style="color: darkgray">
+                                                    Drop files here.
+                                                </span>
+                                                <div class="col-md-12 col-sm-12 col-xs-12" style="display: none;" name="uploading">
+                                                    <img src="~/images/ExcelFile.png"/>
+                                                    <div class="filetitle">File: <div name="filename" style="display: inline-block !important;"></div></div>
+                                                    <div>
+                                                        <div>File size: &nbsp; <div name="filesize" style="display: inline-block !important;"></div>KB</div>
+                                                        <div>No. of record(s): &nbsp; <div name="noofrecords" style="display: inline-block !important;"></div></div>
+                                                        <div>Uploading date: &nbsp; <div name="uploadingdatetime" style="display: inline-block !important;"></div></div>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-primary" style="margin-top: 20px;" ng-click="uploadStudentAttendenceDetail()">
+                                                            Upload
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/uploadExcel.js"></script>

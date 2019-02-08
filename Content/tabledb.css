@@ -1,0 +1,341 @@
+﻿.hideScroller {
+    position: absolute;
+    right: 14px;
+    width: 18px;
+    height: 38.2px;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-bottom: 3px solid #d9d9d9;
+    border-left: none;
+}
+
+.databaseTable td {
+    padding: 0px !important;
+    line-height: 0px !important;
+    vertical-align: middle !important;
+}
+
+.tickColumn {
+    width: 7%;
+    text-align: center;
+}
+
+.tabelbodyDv {
+    height: 250px;
+    overflow-y: scroll;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.txtNoBoarder {
+    border: none !important;
+    border-style: none;
+    padding-left: 10px;
+    width: 100%;
+}
+
+input.chkStyle {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.new-btn {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+
+.txtfull {
+    width: 100%;
+}
+
+.chk-space {
+    display: inline-block !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px;
+}
+
+.connection-img {
+    float: left;
+    width: 26px;
+    margin-right: 10px;
+}
+
+.bcd {
+    background-color: #eee;
+    color: #eee;
+}
+
+.imgtblicon {
+    width: 30px;
+    margin-left: 20px;
+}
+
+.center-item {
+    text-align: center;
+}
+
+.btn-server {
+    position: absolute;
+    right: 6px;
+    top: 0px;
+}
+
+img.imgdb {
+    width: 60px;
+}
+
+.lbl {
+    padding-top: 8px;
+}
+
+input, select, textarea {
+    max-width: 100% !important;
+}
+
+.cust-dd div {
+    width: 100%;
+    height: 20px;
+    padding: 10px;
+    padding-top: 15px;
+}
+
+    .cust-dd div:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
+
+.cust-dd {
+    position: absolute;
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    z-index: 1000;
+    margin-top: 5px;
+}
+
+.editableBox {
+    width: 75px;
+    height: 30px;
+}
+
+.timeTextBox {
+    width: 54px;
+    margin-left: -78px;
+    height: 25px;
+    border: none;
+}
+
+.newtype {
+    width: 100%;
+    border: 0px;
+    padding-left: 4px !important;
+}
+
+
+.select-editable {
+    position: relative;
+    background-color: white;
+    width: 100%;
+    height: 18px;
+}
+
+    .select-editable select {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        font-size: 14px;
+        border: none;
+        width: 100%;
+        margin: 0;
+    }
+
+    .select-editable input {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 90%;
+        padding: 1px;
+        font-size: 12px;
+        border: none;
+    }
+
+        .select-editable select:focus, .select-editable input:focus {
+            outline: none;
+        }
+
+.tblcreate-dv {
+    width: 50%;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    border-radius: 0px;
+    left: 0px;
+    z-index: 1000;
+    box-shadow: 6px 0px 80px -23px black;
+}
+
+.table-body-dv {
+    border-radius: 0px;
+    box-shadow: none;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+}
+
+img.dynamic-table {
+    width: 30px;
+}
+
+.dynamic-dv {
+    display: inline-block;
+    min-width: 100px;
+    margin: auto 20px;
+}
+
+.dbtabledv {
+    display: inline-block;
+    height: 90px;
+}
+
+a.anc-tableview {
+    display: block;
+    text-align: center;
+}
+
+.header-row-dv {
+    text-align: center;
+}
+
+.tooltop-table {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    z-index: 1000;
+}
+
+    .tooltop-table table tr {
+        border: 1px solid #d9d9d9;
+    }
+
+    .tooltop-table table td, th {
+        padding: 5px;
+        text-align: left;
+        padding-left: 10px;
+    }
+
+svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+}
+
+/*----------------------------------- Arrow right --------------------------------*/
+
+.arrow_right:after, .arrow_right:before {
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.arrow_right:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-left-color: #88b7d5;
+    border-width: 8px;
+    margin-top: -8px;
+}
+
+.arrow_right:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-left-color: #c2e1f5;
+    border-width: 8px;
+    margin-top: -8px;
+}
+
+/*----------------------------------- Arrow top --------------------------------*/
+
+.arrow_top:after, .arrow_top:before {
+    bottom: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.arrow_top:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: #88b7d5;
+    border-width: 8px;
+    margin-left: -8px;
+}
+
+.arrow_top:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: #c2e1f5;
+    border-width: 8px;
+    margin-left: -8px;
+}
+
+
+/*----------------------------------------------- Arrow left -------------------------------------*/
+
+.arrow_left:after, .arrow_left:before {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.arrow_left:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-right-color: #88b7d5;
+    border-width: 8px;
+    margin-top: -8px;
+}
+
+.arrow_left:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-right-color: #c2e1f5;
+    border-width: 8px;
+    margin-top: -8px;
+}
+
+
+/*----------------------------------- Arrow bottom -----------------------------------*/
+
+.arrow_bottom:after, .arrow_bottom:before {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.arrow_bottom:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: #88b7d5;
+    border-width: 8px;
+    margin-left: -8px;
+}
+
+.arrow_bottom:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-top-color: #c2e1f5;
+    border-width: 8px;
+    margin-left: -8px;
+}

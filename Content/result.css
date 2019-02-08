@@ -1,0 +1,173 @@
+.logo-img{
+  width: 110px;
+}
+
+.fullbd{
+  border: 1px solid #d9d9d9;
+}
+
+.result-info{
+  text-align: center;
+  width: 100%;
+}
+
+img.profile-img {
+  width: 130px;
+  height: 130px;
+}
+
+.profile-dv{
+  border: 1px solid #d9d9d9;
+  margin-top: 0px;
+}
+
+.body-d4 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 14px;
+}
+
+.bdy-d3{
+  text-align: right;
+  padding: 8px;
+  float: right;
+  width: 25%;
+  margin-top: -52px;
+}
+
+.title-dv{
+  text-align: center;
+  margin: 6px;
+  font-weight: bold;
+}
+
+.title-top{
+  margin-top: 2px;
+}
+
+.rs-tbl{
+  width: 100%;
+}
+
+.center {
+  text-align: center;
+}
+
+.result th, .result td {
+    text-align: left;
+    border: 1px solid #d9d9d9;
+    text-align: center;
+}
+
+.atten th, .atten td {
+    border: 1px solid #d9d9d9;
+    text-align: center;
+    padding: 2px 0px;
+}
+
+.atten th{
+  padding: 10px;
+}
+
+.result th{
+  padding: 10px;
+}
+
+.nopadding{
+  padding: 0px;
+}
+
+.nomargin{
+  margin: 0px;
+}
+
+.td-text{
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.char-text{
+  text-align: center;
+  border-top: 1px solid #d9d9d9;
+  display: -webkit-box;
+  width: 100%;
+  display: inline-block;
+  padding-top: 14px;
+}
+
+.remark-dv {
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    text-align: center;
+    line-height: 50px;
+    font-weight: bold;
+}
+
+.remark-text{
+  border: 1px solid #d9d9d9;
+  margin-top: 4px;
+  min-height: 90px;
+  padding: 10px;
+  font-size: 15px;
+}
+
+.result-footer {
+  border: 1px solid #d9d9d9;
+  height: 140px;
+  margin-top: 4px;
+  display: inline-block;
+  width: 33.333%;
+  float: left;
+}
+
+.signature-dv {
+  position: relative;
+  top: 65%;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  border-top: 2px solid #d9d9d9;
+  margin: auto 56px;
+  padding-top: 10px;
+}
+
+.stamp {
+    text-align: center;
+    position: relative;
+    top: 45%;
+}
+
+.fullwidth {
+  width: 100%;
+}
+
+.header-tbl1 {
+  width: 50%;
+}
+
+.header-tbl2 {
+  width: 50%;
+}
+
+.bdy-d2{
+  width: 75%;
+}
+
+.grad-desc{
+  width: 25%;
+  display: inline-block;
+}
+
+.grad-graph{
+  width: 74%;
+  display: inline-block;
+  float: right;
+}
+
+.no-print {
+    position: absolute;
+    top: -56px;
+    right: 0px;
+}

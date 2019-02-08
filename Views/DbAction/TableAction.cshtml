@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "TableAction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/tabledb.css" rel="stylesheet" />
+
+<div class="right_col" role="main" ng-controller="tablechatCtrl">
+    <div id="createtable" class="tblcreate-dv modal-dialog-centered" role="document" style="display: none;" ng-click="resetSelected()">
+        <div class="modal-content table-body-dv">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" ng-click="closeCreator()" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="dynamodal">
+            </div>
+            <div class="modal-footer" style="border: none !important;">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>
+                    Echarts
+                    <small>Some examples to get you started</small>
+                </h3>
+            </div>
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row" id="dy-table" ng-click="hideTooltips()">
+            <div ng-repeat="row in Wrapper" tabindex="{{row.Counter}}" class="header-row-dv">
+                <div class="dbtabledv" ng-repeat="table in row" priorityLevel="{{table.ReferencedCount}}">
+                    <div class="dynamic-dv" name="{{table.TableName}}" style="">
+                        <img src="../images/table.png" alt="Table" class="dynamic-table" />
+                        <a class="anc-tableview" href="javascript:void(0)" ng-click="ViewTableDetail()">
+                            {{table.TableName}}
+                        </a>
+                        <div name="tableSchema" class="tooltop-table" style="display: none;">
+                            <table>
+                                <thead>
+                                    <tr style="background-color: #2b3f53;color: #eee;">
+                                        <th>Column</th>
+                                        <th>Datatype</th>
+                                        <th>Size</th>
+                                        <th>IsNullable</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="column in table.SchemaDetail">
+                                        <td>{{column.ColumnName}}</td>
+                                        <td>{{column.Datatype}}</td>
+                                        <td>{{column.Length}}</td>
+                                        <td>{{column.IsNullable}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div name="constraint" class="tooltop-table" style="display: none;">
+                            <table>
+                                <thead>
+                                    <tr style="background-color: #2b3f53;color: #eee;">
+                                        <th>Column</th>
+                                        <th>Constraint</th>
+                                        <th>Referenced Table</th>
+                                        <th>Referenced Column</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="rist in table.Constraint">
+                                        <td>{{rist.ColumnName}}</td>
+                                        <td>{{rist.ConstraintName}}</td>
+                                        <td>{{rist.ReferencedColumnName}}</td>
+                                        <td>{{rist.ReferencedTableName}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/idbgen.js"></script>

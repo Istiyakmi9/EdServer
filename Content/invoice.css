@@ -1,0 +1,101 @@
+﻿.stud-info {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+    .stud-info tr {
+        border-bottom: 1px solid #d9d9d9;
+    }
+
+    .stud-info td {
+        padding: 8px 0px;
+    }
+
+.stud-dv {
+    width: 30%;
+    margin: auto 10px;
+    display: inline-block;
+    float: left;
+}
+
+.invoie-total {
+    width: 35%;
+    margin: auto 10px;
+    display: inline-block;
+    float: right;
+}
+
+.action {
+    margin-top: 30px;
+}
+
+.infodv {
+    border: 1px solid #d9d9d9;
+    margin: auto 0px;
+    padding: 25px 0px;
+}
+
+td, th {
+    border: 1px solid #d9d9d9;
+}
+
+.student-info-table td {
+    border: none;
+}
+
+.info-table {
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.stud-info-head {
+    font-weight: bold;
+}
+
+.sig-footer {
+    border: 1px solid #d9d9d9;
+    margin: auto 0px;
+}
+
+.footer-dv {
+    width: 32.9999999%;
+    display: inline-block;
+    height: 100px;
+    text-align: center;
+    border-right: 1px solid #d9d9d9;
+    float: left;
+}
+
+    .footer-dv p {
+        position: relative;
+        top: 75%;
+        border-top: 1px solid #d9d9d9;
+        margin: auto 14%;
+        padding-top: 2px;
+    }
+
+    .footer-dv span {
+        position: relative;
+        top: 40%;
+    }
+
+.invoice-header {
+    border-bottom: 1px solid #d9d9d9;
+    margin-bottom: 16px;
+}
+
+.no-print {
+    position: absolute;
+    top: 20px;
+    right: 0px;
+}
+
+.right-pull {
+    margin-right: 15%;
+    float: right;
+    margin-top: 18px;
+}
+
+.student-info-table {
+    width: 100%;
+}

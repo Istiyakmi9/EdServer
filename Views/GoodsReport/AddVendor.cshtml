@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "AddVendor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main">
+    <div ng-controller="vendorRegistrationCtrl" id="vendorRegistration">
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 x_panel">
+                <div class="x_title" style="margin-bottom: 35px;">
+                    <h2>Add New Vendor<small>Complete information about vendor's</small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Student detail <small>Fill student personal</small></h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br />
+                            <form class="form-horizontal form-label-left input_mask">
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" id="SellerFirstName" name="SellerFirstName" ng-keyup="validateInput()"
+                                           placeholder="Vendor First Name" ng-model="vendor.SellerFirstName" value="">
+                                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control" id="SellerLastName" name="SellerLastName" ng-keyup="validateInput()"
+                                           placeholder="Vendor Last Name" ng-model="vendor.SellerLastName" value="">
+                                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" id="Email" name="Email" ng-keyup="validateInput()"
+                                           placeholder="Email" ng-model="vendor.Email" value="">
+                                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control" id="Mobile" name="Mobile" ng-keyup="validateInput()" validate="1"
+                                           ng-keypress="maskmobile()" placeholder="Mobile number" ng-model="vendor.Mobile" value="">
+                                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 4px;margin-top:7px;">
+                                    <label class="control-label col-md-12 col-sm-12 col-xs-12" style="text-align:left;margin-bottom: 6px;">
+                                        Address <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <textarea type="text" class="form-control" rows="4" ng-keyup="validateInput()" ng-model="vendor.FullAddress" 
+                                                  id="FullAddress" name="FullAddress" placeholder="Address" validate="1"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Student other details <small>school related details</small></h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br />
+                            <form class="form-horizontal form-label-left" style="margin-top: 6px;">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Shop Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="ShopName" name="ShopName" class="form-control" ng-keyup="validateInput()"
+                                               placeholder="Shop Name" ng-model="vendor.ShopName" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Bank Name <span class="required">*</span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="form-control col-md-4 col-xs-4" type="select" validate="1" id="BankName" ng-model="vendor.BankName" name="BankName"
+                                                ng-change="validateDropDown()">
+                                            <option selected="selected" value="">Select Bank</option>
+                                            <option value="HDFC">HDFC</option>
+                                            <option value="ICICI">ICICI</option>
+                                            <option value="Kotak Mahindra">Kotak Mahindra</option>
+                                            <option value="SBI">SBI</option>
+                                            <option value="UBI">Union bank of India</option>
+                                            <option value="Axis">Axis Bank</option>
+                                            <option value="CBI">Central bank of India</option>
+                                            <option value="IDBI">IDBI</option>
+                                            <option value="BOI">Bank of India</option>
+                                            <option value="Canara Bank">Canara Bank</option>
+                                            <option value="Yes Bank">Yes Bank</option>
+                                            <option value="HSBC">HSBC</option>
+                                            <option value="Syndicate Bank">Syndicate Bank</option>
+                                            <option value="UCO Bank">UCO Bank</option>
+                                            <option value="Allahabad Bank">Allahabad Bank</option>
+                                            <option value="Bank of baroda">Bank of baroda</option>
+                                            <option value="Indusland">Indusland</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Account No. <span class="required">*</span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" name="AccountNo" id="AccountNo" validate="1" placeholder="Account No." ng-model="vendor.AccountNo"
+                                               ng-keyup="validateInput()" class="form-control col-md-10" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">IFSC Code <span class="required">*</span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" name="IFSCCode" id="IFSCCode" placeholder="IFSC Code" ng-model="vendor.IFSCCode" ng-keyup="validateInput()"
+                                               class="form-control col-md-10" validate="1" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">GSTIN no.</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="GSTIN" name="GSTIN" class="form-control" ng-keyup="validateInput()"
+                                               placeholder="Your GST IN" ng-model="vendor.GSTIN" value="" validate="1">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="actionBar" style="float: left;margin-top: 50px;">
+                    <input type="hidden" ng-model="vendor.VendorUId" id="VendorUId" name="VendorUId" value="" />
+                    <a href="javascript:void(0)" id="nextbtn" ng-click="resetall()" class="buttonNext btn btn-success">Reset</a>
+                    <a href="javascript:void(0)" id="prevbtn" ng-click="registerVendor()" class="buttonPrevious btn btn-primary">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var Data = @Html.Raw(@ViewBag.Result)
+</script>
+<script src="~/Scripts/addvendor.js"></script>

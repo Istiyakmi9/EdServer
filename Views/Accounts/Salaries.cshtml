@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = "Salaries";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/accounts.css" rel="stylesheet" />
+<div class="right_col" role="main" ng-controller="SalaryCtrl">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Salary Detail <small>Paid, Due and all other detail regarding salaries.</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="#">Settings 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-md-8 col-lg-8 col-sm-8 col-xs-12" style="border-right: 1px solid #d9d9d9;">
+                    <div class="x_content min-card-height">
+                        <table class="table person-list">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Salary/Month</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-click="SelectedStaff()" ng-repeat="record in TableResultSet track by $index">
+                                    <th scope="row">
+                                        <input type="hidden" name="uid" value="{{record.StaffMemberUid}}" />
+                                        1
+                                    </th>
+                                    <td>{{record.FName}}</td>
+                                    <td><i class="fa fa-inr"></i>20500.00</td>
+                                    <td>Paid</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row border-vertical">
+                        <div class="col-sm-5">
+                            <div class="dataTables_info" style="width: 100%;" id="datatable_info" role="status" aria-live="polite">
+                                Showing {{fromCount}} to {{toCount}} of {{recordDetail.total}} entries
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="paging-dv">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12 widget_tally_box">
+                    <div class="x_panel info-card">
+                        <div class="x_content">
+                            <div class="flex">
+                                <ul class="list-inline widget_profile_box">
+                                    <li>
+                                        <a>
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <img src="../images/picture.png" alt="..." class="img-circle profile_img">
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <h3 class="name">{{SingleUser.FName}}</h3>
+                            <div class="flex">
+                                <ul class="list-inline count2">
+                                    <li>
+                                        <p style="font-size: 20px;"><i class="fa fa-inr"></i>25000</p>
+                                        <span>Salary</span>
+                                    </li>
+                                    <li style="width: 65%;">
+                                        <p style="font-size: 20px;">Paid<br /><small>10/09/2018</small></p>
+                                        <span>Status</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="flex">
+                                <ul class="list-inline">
+                                    <li>
+                                        <p>
+                                            RK International faculty. My subject is mathamatic, i use to teach students of classes like <b>8</b>, <b>9</b>, and <b>10</b> standard.
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="flex info-detail">
+                                <table>
+                                    <tr>
+                                        <td>Class Teacher</td>
+                                        <td class="move-right">2-A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Registration No.</td>
+                                        <td class="move-right">EDS09808352</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile</td>
+                                        <td class="move-right">+91-{{SingleUser.MobileNumber}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email id</td>
+                                        <td class="move-right">{{SingleUser.Email != null ? SingleUser.Email : 'NA'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address</td>
+                                        <td class="move-right">Bihar - Mustafapur dinara</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var Data = @Html.Raw(@ViewBag.Data);
+</script>
+<script src="~/Scripts/salary.js"></script>

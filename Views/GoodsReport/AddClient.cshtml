@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "AddClient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main">
+    <div ng-controller="clientRegistrationCtrl" id="client">
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 x_panel">
+                <div class="x_title" style="margin-bottom: 35px;">
+                    <h2>Add New Vendor<small>Complete information about vendor's</small></h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Student detail <small>Fill student personal</small></h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br />
+                            <form class="form-horizontal form-label-left input_mask">
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" id="PersonName" name="PersonName" ng-keyup="validateInput()"
+                                           placeholder="Client Full Name" ng-model="client.PersonName" value="">
+                                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control" id="ShopName" name="ShopName" ng-keyup="validateInput()"
+                                           placeholder="Shop Name" ng-model="client.ShopName" value="">
+                                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control has-feedback-left" id="AdharNumber" name="AdharNumber" ng-keyup="validateInput()"
+                                           placeholder="Adhar Number" ng-model="client.AdharNumber" value="">
+                                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="text" class="form-control" id="GSTIN" name="GSTIN" ng-keyup="validateInput()" validate="1"
+                                           placeholder="GSTIN" ng-model="client.GSTIN" value="">
+                                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 4px;margin-top:7px;">
+                                    <label class="control-label col-md-12 col-sm-12 col-xs-12" style="text-align:left;margin-bottom: 6px;">
+                                        Address <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <textarea type="text" class="form-control" rows="4" ng-keyup="validateInput()" ng-model="client.FullAddress"
+                                                  id="FullAddress" name="FullAddress" placeholder="Full Address" validate="1"></textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Student other details <small>school related details</small></h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br />
+                            <form class="form-horizontal form-label-left" style="margin-top: 6px;">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="Mobile" name="Mobile" class="form-control" ng-keyup="validateInput()"
+                                              ng-keypress="maskmobile()" placeholder="Mobile" ng-model="client.Mobile" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Id<span class="required">*</span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" name="Email" id="Email" validate="1" placeholder="Email" ng-model="client.Email"
+                                               ng-keyup="validateInput()" class="form-control col-md-10" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="actionBar" style="float: left;margin-top: 50px;">
+                    <input type="hidden" ng-model="client.ClientUid" id="ClientUid" name="VendorUId" value="" />
+                    <a href="javascript:void(0)" id="nextbtn" ng-click="resetall()" class="buttonNext btn btn-success">Reset</a>
+                    <a href="javascript:void(0)" id="prevbtn" ng-click="registerClient()" class="buttonPrevious btn btn-primary">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var Data = @Html.Raw(@ViewBag.Result)
+</script>
+<script src="~/Scripts/addclient.js"></script>
+

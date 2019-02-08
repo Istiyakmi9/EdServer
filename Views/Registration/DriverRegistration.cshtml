@@ -1,0 +1,604 @@
+﻿
+@{
+    ViewBag.Title = "StaffRegistration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<link href="~/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<div class="right_col">
+    <div class="col-md-12 col-sm-12 col-xs-12" ng-controller="registerStaff">
+        <div class="x_panel">
+            <div class="modal fade" id="otherreg-pp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Registration alert</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="otherreg-text">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btnregCancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" id="btnregOk" class="btn btn-primary" ng-click="register()" data-dismiss="modal">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Image viewer modal*@
+
+            <div class="modal fade" id="imageviewer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <input type="hidden" name="operationtype" id="operationtype" />
+                            <h5 class="modal-title inlineblock" id="exampleModalLabel">Registration Image Viewer</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="change-icon">
+                            <input type="file" id="singlefile" onchange="angular.element(this).scope().SingleFileChange()" style="display: none;" />
+                            <a ng-click="AddUpdateDocument()" style="width: 75%;" name="update">
+                                <span>Click here to change this image</span>
+                                <img src="~/images/exchange.png" />
+                            </a>
+                            <a href="javascript:void(0)" ng-click="DeleteCurrentDocument()" style="margin-right: 12px;">
+                                <span>Delete</span>
+                                <i class="fa fa-remove"></i>
+                            </a>
+                            <a href="javascript:void(0)" ng-click="AddUpdateDocument()" name="add">
+                                <span>Add new</span>
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                        <div class="modal-body imageviewer-body" style="padding-top: 0px;" id="imageviewer-body">
+                            <div class="main-content-body">
+                                <img class="img-responsive avatar-view" ng-src="{{FilePath}}" alt="Avatar"
+                                     id="viewdoc" title="Change the avatar" style="width: 100%;height: 400px;">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div style="display:flex">
+                                <div style="width: 70%;text-align: left;">
+                                    <ul class="pagination page-ul" id="imageview-pagination">
+                                        <li class="paginate_button" ng-repeat="img in docimages">
+                                            <a name="{{img}}" ng-click="ViewNextImage()" ng-class="{'active-page':$first}">{{$index + 1}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div style="width: 30%">
+                                    <button type="button" id="btnregCancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" id="btnChangeImage" class="btn btn-primary" style="pointer-events: none;" disabled ng-click="SubmitChanges()" data-dismiss="modal">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*Image viewer modal ends*@
+
+
+            <div class="x_title">
+                <h2>Staff Registration <small>Schoole Vehicle and Driver registration.</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+                <div class="modal fade" id="facultyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal Alert</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="staffModalMsg">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="redirectOperation()">Ok</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Smart Wizard -->
+                <p>Driver and vehicle registration form. Enter detail about driver and vehicle</p>
+                <input type="hidden" id="steps-reminder" value="step-1" />
+                <div id="wizard" class="form_wizard wizard_horizontal">
+                    <ul class="wizard_steps">
+                        <li>
+                            <a name="astep-1" title="asteps" class="selected">
+                                <span class="step_no">1</span>
+                                <span class="step_descr">
+                                    Step 1<br />
+                                    <small>Step 1 User detail</small>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a name="astep-2" title="asteps" class="done">
+                                <span class="step_no">2</span>
+                                <span class="step_descr">
+                                    Step 2<br />
+                                    <small>Step 2 Contact info</small>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a name="astep-3" title="asteps" class="done">
+                                <span class="step_no">3</span>
+                                <span class="step_descr">
+                                    Step 3<br />
+                                    <small>Step 3 Vehicle & Qualification detail</small>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a name="astep-4" title="asteps" class="done">
+                                <span class="step_no">4</span>
+                                <span class="step_descr">
+                                    Step 4<br />
+                                    <small>Step 4 Summary</small>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <form method="post" id="registrationForm">
+                        <div id="step-1" class="" name="form-steps">
+                            <div class="form-horizontal form-label-left">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                        First Name <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="FirstName" ng-model="UserData.FirstName" ng-keyup="makeValideField()" name="FirstName" required class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name / Initial</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input id="MiddleName" ng-model="middleName" ng-keyup="makeValideField()" class="form-control col-md-7 col-xs-12" type="text" name="MiddleName">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                        Last Name
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" ng-model="LastName" id="LastName" ng-keyup="makeValideField()" name="LastName" required class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div id="gender" class="btn-group">
+                                            <p class="para-gender">
+                                                Male:
+                                                <input type="radio" class="rdo icheckbox_flat-green" style="margin: 0px;" name="gender" id="genderM" value="male" checked="checked" />
+
+                                                Female:
+                                                <input type="radio" class="rdo icheckbox_flat-green" style="margin: 0px;" name="gender" id="genderF" value="female" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Date Of Birth <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <div class='input-group date' id='myDatepicker'>
+                                                <input id="Dob" ng-model="StaffDob" name="Dob" ng-blur="maskDateTime()" class="date-picker form-control col-md-7 col-xs-12" required type="text">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                Enter your personal information.
+                            </p>
+                        </div>
+                        <div id="step-2" class="dn" name="form-steps">
+                            <div class="form-horizontal form-label-left">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mobile">
+                                        Mobile no. <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" for="phone" class="form-control" ng-model="UserData.MobileNumber" id="MobileNumber" name="MobileNumber" ng-keypress="maskmobile()" required="required" data-inputmask="'mask' : '(999) 999-9999'">
+                                        <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                                    </div>
+                                    <span style="color: red;margin-top:8px;">Only numbers are allowed</span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="alternet">
+                                        Alternet no.
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="AlternetNumber" ng-model="UserData.AlternetNumber" name="AlternetNumber" ng-keypress="maskmobile()" required="required" class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                    <span style="color: red;margin-top:8px;">Only numbers are allowed</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Email Id
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input id="Email" ng-model="UserData.Email" class="form-control col-md-7 col-xs-12" ng-keyup="makeValideField()" type="text" name="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Full address <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <textarea id="Address" ng-model="UserData.Address" ng-keyup="makeValideField()" rows="3" class="form-control col-md-7 col-xs-12" required="required" name="Address" type="text"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select id="State" ng-model="UserData.State" class="form-control col-md-4 col-xs-4" ng-change="validateDD()" type="select" name="State">
+                                            <option selected="selected" value="">Select state</option>
+                                            <option value="Bihar">Bihar</option>
+                                            <option value="West Bangal">West Bangal</option>
+                                            <option value="Jharkhand">Jharkhand</option>
+                                            <option value="UP">UP</option>
+                                            <option value="Odisha">Odisha</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city" class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <select id="City" ng-model="UserData.City" class="form-control col-md-4 col-xs-4" ng-change="validateDD()" type="select" name="City">
+                                            <option selected="selected" value="">Select city</option>
+                                            <option value="Bihar">Bihar</option>
+                                            <option value="West Bangal">West Bangal</option>
+                                            <option value="Jharkhand">Jharkhand</option>
+                                            <option value="UP">UP</option>
+                                            <option value="Odisha">Odisha</option>
+                                        </select>
+                                    </div>
+                                    <label for="middle-name" class="control-label col-md-1 col-sm-3 col-xs-12">Pincode</label>
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <input id="Pincode" ng-model="UserData.pincode" class="form-control col-md-7 col-xs-12" ng-keypress="maskPincode()" type="number" maxlength="6" name="Pincode">
+                                    </div>
+                                </div>
+                            </div>
+                            <h2 class="StepTitle">Step 2 - Contact information</h2>
+                            <p>
+                                Personal contact and other details.
+                            </p>
+                        </div>
+                        <div id="step-3" class="dn" name="form-steps">
+
+                            <h2 class="StepTitle" style="margin-top: 20px;"> Higest Qualification &nbsp;(Optional)</h2>
+                            <div class="actionBar"></div>
+                            <div class="form-horizontal form-label-left">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                        School / University
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" ng-model="UserData.SchoolUniversityName" id="SchoolUniversityName" placeholder="School or University Name" name="SchoolUniversityName" class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="degree">
+                                        Degree
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" ng-model="UserData.DegreeName" placeholder="Degree" id="DegreeName" name="DegreeName" class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Grade" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Grade
+                                    </label>
+                                    <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <input id="Grade" ng-model="UserData.Grade" placeholder="Grade" class="form-control col-md-4 col-xs-4" type="text" name="Grade">
+                                    </div>
+                                    <label for="MarksObtain" class="control-label col-md-1 col-sm-3 col-xs-12">
+                                        Marks
+                                    </label>
+                                    <div class="col-md-2 col-sm-6 col-xs-12">
+                                        <input id="MarksObtain" ng-model="UserData.MarksObtain" placeholder="Marks" class="form-control col-md-7 col-xs-12" type="number" name="MarksObtain">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ExprienceInYear" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                        Proof Of Documents
+                                    </label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <div class="view-item-dv">
+                                            <input type="file" value="" name="documentUrl" multiple id="documentUrl" ng-model="DocumentPath"
+                                                   onchange="angular.element(this).scope().CheckFileType()" style="display: none;" />
+                                            <div>
+                                                <a href="javascript:void(0)" id="docfiles" class="dn point-active" ng-click="ShowDocumentPopup()" style="text-decoration: none;">
+                                                    <span class="display-files">{{DocFiles}}</span>
+                                                </a>
+                                                <a href="javascript:void(0)" id="docfileDesc" ng-click="AttachDocuments()">
+                                                    <span>{{DocFileDesc}}</span>
+                                                </a>
+                                                <a href="javascript:void(0)" ng-click="AttachDocuments()" style="width: 36px">
+                                                    <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <h2 class="StepTitle" style="margin-top: 20px;">Step 3 - Vehicle Detail &nbsp;(Required)</h2>
+                            <div class="actionBar"></div>
+                            <div class="form-horizontal form-label-left">
+                                <div class="" role="tabpanel" data-example-id="togglable-designation" id="togglable-designation">
+                                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                        <li role="presentation" class="active">
+                                            <a href="#tab_content2" role="tab" id="anc-other-tab" ng-click="ActiveOther()" data-toggle="tab" aria-expanded="false">Other</a>
+                                        </li>
+                                        <li role="presentation" class="">
+                                            <a href="#tab_content1" id="anc-driver-tab" role="tab" data-toggle="tab" ng-click="ActiveDriver()" aria-expanded="true">Driver</a>
+                                        </li>
+                                    </ul>
+                                    <div id="myTabContent" class="tab-content">
+                                        <div role="tabpanel" class="tab-pane fade active in" id="other-tab" aria-labelledby="other-tab">
+                                            <p>
+                                                Default selected option is 'Other'. No extra fields required for this position. Select Driver to fill vehicle detail or proceed with next.
+                                            </p>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane fade" id="vehicle-tab" aria-labelledby="driver-tab">
+                                            <div class="form-group">
+                                                <label for="ExprienceInYear" class="control-label col-md-3 col-sm-3 col-xs-12">
+                                                    Vehicle Type <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-3 col-sm-3 col-xs-12" style="width: 23.6%;">
+                                                    <select id="vehicletype" ng-model="UserData.VehicleTypeId" class="form-control col-md-4 col-xs-4" ng-change="maskDropDown()" type="select" name="vehicletype">
+                                                        <option selected="selected" value="">Select Vehicle Type</option>
+                                                        <option ng-repeat="vehicle in VehicleType" value="{{vehicle.vehicleTypeId}}">{{vehicle.vehicleName}}</option>
+                                                    </select>
+                                                </div>
+                                                <label for="vehicleno" ng-model="UserData.MarksObtain" style="width: 100px;"
+                                                       class="control-label col-md-1 col-sm-3 col-xs-12">
+                                                    Vehicle No <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-2 col-sm-6 col-xs-12">
+                                                    <input type="text" id="vehicleno" ng-model="UserData.VehicleNumber" name="vehicleno" ng-keyup="maskTextBox()" class="form-control col-md-7 col-xs-12">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                                    Vehicle Registration no. <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <input type="text" ng-model="UserData.VehicleRegistrationNo" id="VehicleRegistrationNo" ng-keyup="maskTextBox()" name="VehicleRegistrationNo" class="form-control col-md-7 col-xs-12">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="step-4" name="form-steps" class="dn">
+                            <div class="row" id="summary-dv">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="x_panel">
+                                        <div class="x_title">
+                                            <h2>Profile <small>summay</small></h2>
+                                            <ul class="nav navbar-right panel_toolbox">
+                                                <li>
+                                                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                                </li>
+                                                <li class="dropdown">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li>
+                                                            <a href="#">Settings 1</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Settings 2</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a class="close-link"><i class="fa fa-close"></i></a>
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="x_content">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="row">
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="x_panel">
+                                                            <div class="x_title">
+                                                                <h2>Form Design <small>different form elements</small></h2>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                            <div class="col-md-12 col-sm-12 col-xs-12 profile_left">
+                                                                <div class="profile_img">
+                                                                    <div id="crop-avatar" class="img-dv">
+                                                                        <!-- Current avatar -->
+                                                                        <img class="img-responsive userProfile avatar-view" ng-src="{{ImageUrl}}" alt="Avatar"
+                                                                             id="selectedImageUrl" title="Change the avatar">
+                                                                    </div>
+                                                                </div>
+                                                                <h3>{{UserData.FirstName}} {{UserData.LastName}}</h3>
+                                                                <input type="file" value="" name="imageUrl" id="imageUrl"
+                                                                       onchange="angular.element(this).scope().BindAttachForProfileImage()" style="display: none;" />
+                                                                <a class="btn btn-success" ng-click="showFiles()"><i class="fa fa-edit m-right-xs"></i>Browse image</a>
+                                                                <br />
+                                                            </div>
+                                                            <div class="x_content">
+                                                                <br />
+                                                                <div class="form-horizontal form-label-left input_mask">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">First name</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.FirstName}}" placeholder="First name">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Last Name </label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.LastName}}" placeholder="Last name">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Date of birth </label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.Dob}}" placeholder="Date of birth">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                                                            Address
+                                                                        </label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <textarea class="form-control" rows="3" placeholder='Full address'>
+                                                                                {{UserData.Address}}
+                                                                            </textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Email Id</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.Email}}" placeholder="Default Input">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.State}}" placeholder="State">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="x_panel">
+                                                            <div class="x_title">
+                                                                <h2>Form Basic Elements <small>different form elements</small></h2>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                            <div class="x_content">
+                                                                <br />
+                                                                <div class="form-horizontal form-label-left" style="margin-top: 39px;">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.City}}" placeholder="City">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Pincode</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.Pincode}}" placeholder="Pincode">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">School / University</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.SchoolUniversityName}}" placeholder="School / University">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Degree</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.DegreeName}}" placeholder="Degree">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Grade</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.Grade}}" placeholder="Grade">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Marks obtained</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.MarksObtain}}" placeholder="Marks obtained">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.Gender}}" placeholder="Gender">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile number</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.MobileNumber}}" placeholder="Mobile number">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Alternet number</label>
+                                                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                            <input type="text" class="form-control" disabled="disabled" value="{{UserData.AlternetNumber}}" placeholder="Alternet number">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <!-- End SmartWizard Content -->
+
+                <div class="actionBar">
+                    <a href="javascript:void(0)" id="submitbtn" disabled="disabled" ng-click="finishApplication()" class="buttonFinish btn btn-default">Submit</a>
+                    <a href="javascript:void(0)" id="nextbtn" ng-click="nextStep()" class="buttonNext btn btn-success">Next</a>
+                    <a href="javascript:void(0)" id="prevbtn" disabled="disabled" ng-click="previousStep()" class="buttonPrevious btn btn-primary">Previous</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var Data = @Html.Raw(@ViewBag.OtherStaff)
+    var UploadedFileNames = @Html.Raw(@ViewBag.UploadedFileNames)
+</script>
+<script src="~/Scripts/driver.js"></script>

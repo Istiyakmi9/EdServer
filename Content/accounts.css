@@ -1,0 +1,29 @@
+﻿.border-vertical {
+    border-top: 1px solid #d9d9d9;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.table tbody tr:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.info-card {
+    background-color: steelblue;
+    color: #fff;
+    min-height: 514px;
+}
+
+.info-detail {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 10px 0px;
+}
+
+.min-card-height {
+    min-height: 467px;
+}
+
+.person-list tbody tr {
+    height: 40px;
+}

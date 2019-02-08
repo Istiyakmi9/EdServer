@@ -1,0 +1,805 @@
+﻿
+@{
+    ViewBag.Title = "Viewresult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<link href="~/Content/viewresult.css" rel="stylesheet" />
+<link href="~/Content/result.css" rel="stylesheet" />
+<script src="~/Scripts/xlsx.full.min.js"></script>
+<script src="~/Scripts/jszip.js"></script>
+<div class="right_col" role="main" ng-controller="viewresult">
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="notifier ui-pnotify dark ui-pnotify-fade-normal ui-pnotify-in ui-pnotify-fade-in ui-pnotify-move" aria-live="assertive"
+             aria-role="alertdialog" style="display: none;">
+            <div class="alert ui-pnotify-container alert-info ui-pnotify-shadow" role="alert" style="min-height: 16px;">
+                <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close" style="cursor: pointer; visibility: hidden; display: none;">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </div>
+                <div class="ui-pnotify-sticker" aria-role="button" aria-pressed="true" tabindex="0" title="Unstick" style="cursor: pointer; visibility: hidden; display: none;">
+                    <span class="glyphicon glyphicon-play" aria-pressed="true"></span>
+                </div>
+                <div class="ui-pnotify-icon">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                </div><h4 class="ui-pnotify-title">PNotify</h4>
+                <div class="ui-pnotify-text" aria-role="alert">
+                    Welcome. Below is the sample screen shot for excel sheet, that how to fill. Click
+                    DOWNLOAD ICON to download sample sheet.
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-bars"></i> Tabs <small>Float left</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#">Settings 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content" id="dropcontainer">
+                        <div class="" id="uploadsec" role="tabpanel" data-example-id="togglable-tabs">
+                            <ul id="uploadTabs" class="nav nav-tabs bar_tabs" role="tablist">
+                                <li role="presentation" class="active" name="resultlist" ng-click="InitTabs()">
+                                    <a href="#tab_content1" role="tab" id="faculty-tab" data-toggle="tab" aria-expanded="false">View result by registration no.</a>
+                                </li>
+                                <li role="presentation" name="regview" class="" ng-click="InitTabs()">
+                                    <a href="#tab_content2" id="master-tab" role="tab" data-toggle="tab" aria-expanded="true">Result by class</a>
+                                </li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in mg-top" id="tab_content1" aria-labelledby="home-tab">
+                                    <div id="errorMsgdv" style="color: red;text-align:center;margin-bottom: 10px; display: none;">All red marked fields are mandatory*.</div>
+                                    <div class="filter-dv" name="filter-dv">
+                                        <div class="form-group">
+                                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                                <label for="fullname" style="margin-right: 20px;">Registration no.</label>
+                                                <input type="text" ng-keyup="findStudent()" id="regno" class="form-control txt-bx"
+                                                       placeholder="Enter your registration no." name="registrationno" required />
+                                            </div>
+                                            <div class="col-md-9 col-sm-9 col-xs-12 reglist" name="showStudentList" style="display: none;">
+                                                <table name="showStudenttable" style="display:none;">
+                                                    <tbody>
+                                                        <tr ng-click="selectStudent()" ng-repeat="stud in SiblingDetail">
+                                                            <td>{{stud.FullName}} - [ {{stud.registrationNo}} ]</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div name="loaderdv" class="loaderdv">
+                                                    <img src="../images/loader.gif" />
+                                                    <span>&ensp;Getting studnet detail.</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                <label for="email" style="margin-right: 10px;">Exam</label>
+                                                <select class="form-control filter-select" id="examid" ng-model="examType" ng-change="BackExamTypeToInit()">
+                                                    <option value="">Exam type</option>
+                                                    <option value="100">1st term unit test</option>
+                                                    <option value="201">2st term unit test</option>
+                                                    <option value="200">Half-yearly exam</option>
+                                                    <option value="301">3st term unit test</option>
+                                                    <option value="300">Final exam</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                <label for="email" style="margin-right: 10px;">Year</label>
+                                                <select class="form-control filter-select" id="acedimicyear" ng-model="academic" ng-change="BackAcademicYearToInit()">
+                                                    <option value="">Academic year</option>
+                                                    <option value="2017">2017-18</option>
+                                                    <option value="2018">2018-19</option>
+                                                </select>
+                                            </div>
+                                            <div class="btn-find">
+                                                <button type="submit" class="btn btn-success" ng-click="getResult()">Find result</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="regview1" class="col-md-12 col-sm-12 col-xs-12 mg-top" style="display: none;">
+                                        <div class="clearfix"></div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="x_panel">
+                                                    <div class="x_title">
+                                                        <h2>Student Result<small>view result by registration id.</small></h2>
+                                                        <ul class="nav navbar-right panel_toolbox">
+                                                            <li>
+                                                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                                    <i class="fa fa-wrench"></i>
+                                                                </a>
+                                                                <ul class="dropdown-menu" role="menu">
+                                                                    <li>
+                                                                        <a href="#">Settings 1</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="#">Settings 2</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                <a ng-click="backToDefault()" class="close-link"><i class="fa fa-close"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                    <div class="col-dv">
+                                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                                            <table class="table c-table" style="margin-top: 20px;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th colspan="2">Student Name</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="tdheader">Student Name</td>
+                                                                        <td>{{studentDetail.FulName}}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="tdheader">Registration Number</td>
+                                                                        <td>{{studentDetail.registrationNo}}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="tdheader">Roll No.</td>
+                                                                        <td>{{studentDetail.rollno}}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="tdheader">Class Section</td>
+                                                                        <td>III B</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="x_content">
+                                                        <div style="margin: auto 12%;">
+                                                            <table class="table c-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Subject Code</th>
+                                                                        <th>Subject</th>
+                                                                        <th>Marks</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr ng-repeat="data in ResultData">
+                                                                        <td>SC001</td>
+                                                                        <td>{{data.name | uppercase}}</td>
+                                                                        <td>{{data.value}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="regview" class="col-md-12 col-sm-12 col-xs-12 mg-top" style="display: none;">
+                                        <div class="clearfix"></div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="x_panel">
+                                                    <div class="x_title">
+                                                        <h2>Final result <small>Academic year final result</small></h2>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                    <div class="x_content">
+                                                        <section class="content invoice">
+                                                            <div class="row invoice-info result-info">
+                                                                <div class="col-sm-4 invoice-col" style="width: 25%; display: inline-block;">
+                                                                    <img class="logo-img" src="~/images/logo.jpeg" />
+                                                                </div>
+                                                                <!-- /.col -->
+                                                                <div class="col-sm-4 invoice-col" style="width: 50%; display: inline-block;">
+                                                                    To
+                                                                    <address>
+                                                                        <strong>R.K International School</strong>
+                                                                        <br>Plot-No: B19-15
+                                                                        <br>Dinara rohtash Bihar
+                                                                        <br>Dist: Rohtash
+                                                                        <br>State: Bihar
+                                                                    </address>
+                                                                </div>
+                                                                <!-- /.col -->
+                                                                <div class="col-sm-4 invoice-col" style="width: 25%; display: inline-block;">
+                                                                    <img class="logo-img" src="~/images/logo.jpeg" />
+                                                                </div>
+                                                                <!-- /.col -->
+                                                            </div>
+                                                            <!-- /.row -->
+                                                            <div class="row profile-dv">
+                                                                <div class="col-sm-12 col-md-12 col-xs-12 header-d1">
+                                                                    <div class="bdy-d2">
+                                                                        <div class="col-sm-12 col-md-12 col-xs-12 body-d4">
+                                                                            STUDENT'S PROFILE
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-xs-12 body-tbl">
+                                                                            <table class="col-sm-6 col-md-6 col-xs-12 header-tbl1">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>Name of the Student</td>
+                                                                                        <td><b>:</b>&nbsp; {{PersonalDetail.StudentName}}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Father's Name</td>
+                                                                                        <td><b>:</b>&nbsp; {{PersonalDetail.FatherName}}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Mother's Name</td>
+                                                                                        <td><b>:</b>&nbsp; {{PersonalDetail.MotherName}}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Contact Number</td>
+                                                                                        <td><b>:</b>&nbsp; {{PersonalDetail.FatherMobileno}}</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <table class="col-sm-6 col-md-6 col-xs-12 header-tbl2">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>Class and Section</td>
+                                                                                        <td><b>:</b>&nbsp; {{PersonalDetail.ClassSection}}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Roll No.</td>
+                                                                                        <td><b>:</b>&nbsp; {{PersonalDetail.RollNo}}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Bill No.</td>
+                                                                                        <td><b>:</b>&nbsp; {{PersonalDetail.BillNo}}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>DOB</td>
+                                                                                        <td><b>:</b>&nbsp; {{PersonalDetail.Dob}}</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="bdy-d3">
+                                                                        <img class="profile-img" ng-src="{{ImagePath}}" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row fullbd title-top">
+                                                                <div class="title-dv">
+                                                                    SCHOLASTIC AREAS
+                                                                </div>
+                                                            </div>
+                                                            <div class="row content-dv">
+                                                                <div class="col-sm-12 col-md-12 col-xs-12 nopadding nomargin">
+                                                                    <table class="rs-tbl">
+                                                                        <thead class="result">
+                                                                            <tr>
+                                                                                <th style="border-bottom: 0px;"></th>
+                                                                                <th class="center" colspan="4">FINAL TERM</th>
+                                                                                <th style="border-bottom: 0px;"></th>
+                                                                                <th style="border-bottom: 0px;"></th>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <th style="border-top: 0px;" rowspan="2">SUBJECTS</th>
+                                                                                <th>Priodic Test (10)</th>
+                                                                                <th>Notebook (5)</th>
+                                                                                <th>Subject Enrichment (5)</th>
+                                                                                <th>Annual Exam (80)</th>
+                                                                                <th style="border-top: 0px;">Marks Obtained</th>
+                                                                                <th style="border-top: 0px;">Grade</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody class="result">
+                                                                            <tr ng-repeat="result in ExamResult">
+                                                                                <td>{{result.SubjectName | uppercase}}</td>
+                                                                                <td>{{result.FirstTerm}}</td>
+                                                                                <td>{{result.SecondTerm}}</td>
+                                                                                <td>{{result.ThirdTerm}}</td>
+                                                                                <td>{{result.HalfYearly}}</td>
+                                                                                <td>{{result.Final}}</td>
+                                                                                <td>B1</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="td-text center">Scholastics area's of <br />grading scales</td>
+                                                                                <td colspan="6">
+                                                                                    A1: 91-100,&nbsp; A2: 81-90,&nbsp; B1: 71-80,&nbsp; B2: 61-70,
+                                                                                    &nbsp; C1: 51-60,&nbsp;
+                                                                                    C2: 41-50,&nbsp; D: 33-40,&nbsp; E: 0-32 (Failed)
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-12 col-xs-12 nopadding nomargin" style="margin-top: 4px;">
+                                                                    <div class="grad-desc nopadding nomargin">
+                                                                        <table class="rs-tbl atten">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>CO-SCHOLASTIC AREAS</th>
+                                                                                    <th>GRADE<br />(A-E)</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>WORK EDUCATION</td>
+                                                                                    <td>A</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>ART EDUCATION</td>
+                                                                                    <td>A</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>HEALTH AND PHYSICAL <br />EDUCATION</td>
+                                                                                    <td>B</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>DESCIPLINE</td>
+                                                                                    <td>A</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <table class="rs-tbl atten" style="margin-top: 10px;">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th colspan="2">ATTENDENCE</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>No of</td>
+                                                                                    <td>219</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>No of</td>
+                                                                                    <td>194</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Attendence</td>
+                                                                                    <td>80</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="grad-graph nopadding nomargin">
+                                                                        <div class="x_panel" style="padding-bottom: 15px;">
+                                                                            <div class="x_content">
+                                                                                <div id="graph_bar" style="width:100%; height:226px;"></div>
+                                                                            </div>
+                                                                            <div class="char-text">
+                                                                                Obtained Marks
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-12 col-xs-12 nopadding nomargin">
+                                                                    <div class="remark-dv">
+                                                                        Remarks
+                                                                    </div>
+                                                                    <div class="remark-text">
+                                                                        Has done fairly well and has lots of potential to shine brighter.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="nopadding nomargin result-footer">
+                                                                    <div class="signature-dv">
+                                                                        Class teacher signature.
+                                                                    </div>
+                                                                </div>
+                                                                <div class="nopadding nomargin result-footer">
+                                                                    <div class="stamp">
+                                                                        SCHOOL STAMP
+                                                                    </div>
+                                                                </div>
+                                                                <div class="nopadding nomargin result-footer">
+                                                                    <div class="signature-dv">
+                                                                        Principle signature.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- this row will not appear when printing -->
+                                                            <div class="no-print">
+                                                                <button class="btn btn-default" ng-click="printResult()"><i class="fa fa-print"></i> Print</button>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="default-dv" id="default-dv">
+                                        <span id="spn-msg">
+                                            Enter your registration no. and exam to get your result.
+                                        </span>
+                                        <button id="spinner" style="display: none;" class="btn btn-sm btn-warning">
+                                            <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                                            Please Wait Loading Result...
+                                        </button>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="attendence-tab">
+                                    <div id="resultlist" style="margin-bottom: 10px;" class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="x_content">
+                                            <div class="col-md-6 col-sm-6 col-xs-12 search_filter_dv">
+                                                <div class="col-md-5 col-sm-5 col-xs-12">
+                                                    <select class="form-control" ng-model="selectedClass" ng-change="bindSection()" id="Class" name="Class">
+                                                        <option value="">Select Class</option>
+                                                        <option ng-repeat="item in UniqueClass" value="{{item}}">Standard: {{item}}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5 col-sm-5 col-xs-12">
+                                                    <select class="form-control" id="section" ng-click="BackToNormal()" name="section" disabled>
+                                                        <option value="">Choose Section</option>
+                                                        <option ng-repeat="sec in sectionDetail" value="{{sec.ClassDetailId}}">{{sec.section}}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                    <button type="button" class="btn btn-success">Search</button>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="border-bottom: 1px solid #d9d9d9;">
+                                                <div class="col-sm-5">
+                                                    <div class="dataTables_info" id="datatable_info" role="status" aria-live="polite">
+                                                        Showing {{fromCount}} to {{toCount}} of {{recordDetail.total}} entries
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-7">
+                                                    <div class="dataTables_paginate paging_simple_numbers" id="paging-dv">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- start project list -->
+                                            <table class="table table-striped projects" style="margin-bottom: -10px;">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 1%">#</th>
+                                                        <th style="width: 20%">Student Name</th>
+                                                        <th>Subjects Name</th>
+                                                        <th>Percentage Progress</th>
+                                                        <th>Status</th>
+                                                        <th>#Edit</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <td>
+                                                            <a>Pesamakini Backend UI</a>
+                                                            <br />
+                                                            <small>Created 01.01.2015</small>
+                                                        </td>
+                                                        <td style="width: 22%;">
+                                                            <ul class="list-inline">
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress_sm">
+                                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
+                                                            </div>
+                                                            <small>77% Complete</small>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                                                        </td>
+                                                        <td style="width: 10%;">
+                                                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <td>
+                                                            <a>Pesamakini Backend UI</a>
+                                                            <br />
+                                                            <small>Created 01.01.2015</small>
+                                                        </td>
+                                                        <td style="width: 22%;">
+                                                            <ul class="list-inline">
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress_sm">
+                                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+                                                            </div>
+                                                            <small>60% Complete</small>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                                                        </td>
+                                                        <td style="width: 10%;">
+                                                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <td>
+                                                            <a>Pesamakini Backend UI</a>
+                                                            <br />
+                                                            <small>Created 01.01.2015</small>
+                                                        </td>
+                                                        <td style="width: 22%;">
+                                                            <ul class="list-inline">
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress_sm">
+                                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="12"></div>
+                                                            </div>
+                                                            <small>12% Complete</small>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                                                        </td>
+                                                        <td style="width: 10%;">
+                                                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <td>
+                                                            <a>Pesamakini Backend UI</a>
+                                                            <br />
+                                                            <small>Created 01.01.2015</small>
+                                                        </td>
+                                                        <td style="width: 22%;">
+                                                            <ul class="list-inline">
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress_sm">
+                                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="35"></div>
+                                                            </div>
+                                                            <small>35% Complete</small>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                                                        </td>
+                                                        <td style="width: 10%;">
+                                                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <td>
+                                                            <a>Pesamakini Backend UI</a>
+                                                            <br />
+                                                            <small>Created 01.01.2015</small>
+                                                        </td>
+                                                        <td style="width: 22%;">
+                                                            <ul class="list-inline">
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress_sm">
+                                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="87"></div>
+                                                            </div>
+                                                            <small>87% Complete</small>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                                                        </td>
+                                                        <td style="width: 10%;">
+                                                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <td>
+                                                            <a>Pesamakini Backend UI</a>
+                                                            <br />
+                                                            <small>Created 01.01.2015</small>
+                                                        </td>
+                                                        <td style="width: 22%;">
+                                                            <ul class="list-inline">
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress_sm">
+                                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
+                                                            </div>
+                                                            <small>77% Complete</small>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                                                        </td>
+                                                        <td style="width: 10%;">
+                                                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <td>
+                                                            <a>Pesamakini Backend UI</a>
+                                                            <br />
+                                                            <small>Created 01.01.2015</small>
+                                                        </td>
+                                                        <td style="width: 22%;">
+                                                            <ul class="list-inline">
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                                <li>
+                                                                    <span>Subject</span>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="project_progress">
+                                                            <div class="progress progress_sm">
+                                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="77"></div>
+                                                            </div>
+                                                            <small>77% Complete</small>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-xs">Success</button>
+                                                        </td>
+                                                        <td style="width: 10%;">
+                                                            <a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <!-- end project list -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/viewresult.js"></script>
+<script src="~/vendors/raphael/raphael.min.js"></script>
+<script src="~/vendors/morris.js/morris.min.js"></script>
+<script src="~/Scripts/printThis.js"></script>

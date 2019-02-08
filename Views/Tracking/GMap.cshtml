@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "GMap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #map {
+        height: 632px;
+        width: 100%;
+        margin-top: -10px;
+        padding-right: 2px !important;
+        padding-left: 2px !important;
+    }
+
+    .move-adj {
+        padding-right: 2px !important;
+        padding-left: 2px !important;
+    }
+</style>
+
+<div class="right_col" style="padding: 0px;margin-left: 230px;" role="main" ng-controller="">
+    <div class="col-md-12 col-sm-12 col-xs-12 move-adj">
+        <div id="map"></div>
+    </div>
+</div>
+<script>
+    function initMap() {
+        var uluru = { lat: 17.432734, lng: 78.442511 };
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 18,
+            center: uluru
+        });
+        var marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+        });
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZaFJ3r_fyhAxnQvD8cjNnw-U-DNzvHTo&callback=initMap">
+</script>
+

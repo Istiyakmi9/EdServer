@@ -1,0 +1,147 @@
+﻿.timetable-cell {
+    border: 1px solid #d9d9d9;
+    padding: 0px;
+}
+
+.timetable-cell-header {
+    border: 1px solid #d9d9d9;
+    padding: 0px;
+    text-align: center;
+    padding: 2px 0px;
+}
+
+.timetable-row {
+}
+
+.row-detail {
+    padding: 4px 40px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px 4px 0px 0px;
+    margin-top: 10px;
+    text-align: center;
+    background-color: aliceblue;
+    font-weight: bold;
+}
+
+    .row-detail button {
+        float: right;
+    }
+
+.change-anc {
+    font-size: 16px;
+    display: block;
+    margin-top: -5px;
+    margin-right: -2px;
+}
+
+    .change-anc:hover{
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .assign-text {
+        text-align: center;
+        margin: 20px 0px;
+        margin-top: 10px;
+        font-size: 15px;
+        text-decoration: underline;
+    }
+
+.period-row {
+    display: flex;
+}
+
+.filter-dv {
+    margin-bottom: 0px;
+    border-bottom: 1px solid #d9d9d9;
+    padding-bottom: 12px;
+}
+
+.filter-sel label {
+    position: relative;
+    top: 10px;
+}
+
+.subject-dv {
+    text-align: center;
+    color: cadetblue;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 10px;
+}
+
+.teacher-dv {
+    font-size: 12px;
+    padding-top: 4px;
+    text-align: center;
+}
+
+.events-div {
+    position: absolute;
+    right: 5px;
+    text-align: center;
+    top: 5px;
+}
+
+
+.period-info {
+    padding: 2px 8px;
+}
+
+.period-detail {
+    padding: 7px 10px;
+}
+
+.period-info small {
+    float: right;
+}
+
+.table-filter {
+    display: block;
+    width: 100%;
+    height: 30px;
+}
+
+    .table-filter ul {
+        list-style-type: none;
+        padding: 0px;
+    }
+
+    .table-filter li {
+        float: left;
+        padding: 4px 22px;
+        border: 1px solid #d9d9d9;
+    }
+
+        .table-filter li:first-child {
+            border-radius: 4px 0px 0px 4px;
+        }
+
+        .table-filter li:last-child {
+            border-radius: 0px 4px 4px 0px;
+        }
+
+.anc-selected {
+    background-color: #dde6ee;
+}
+
+.full {
+    width: 100%;
+}
+
+.default-msg-dv {
+    text-align: center;
+    position: relative;
+    font-size: 20px;
+    margin: 20% auto;
+}
+
+.day-head {
+    width: 75px !important;
+}
+
+.header-dv {
+    text-align: center;
+    color: cadetblue;
+    font-weight: bold;
+}

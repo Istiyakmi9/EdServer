@@ -1,0 +1,1 @@
+﻿var arr = ['div', 'span', 'input', 'label', 'p', 'select']

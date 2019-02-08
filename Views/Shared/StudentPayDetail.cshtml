@@ -1,0 +1,122 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_content">
+                <section class="content invoice">
+                    <!-- title row -->
+                    <div class="row">
+                        <div class="col-xs-12 invoice-header">
+                            <h1>
+                                <i class="fa fa-globe"></i> Student Payment Information.
+                                <small class="pull-right">{{IndividualPaymentDetail.CurrentData}}</small>
+                            </h1>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- info row -->
+                    <div class="row invoice-info">
+                        <div class="profile_img col-sm-2 col-xs-12 invoice-col">
+                            <div id="crop-avatar">
+                                <!-- Current avatar -->
+                                <img class="img-responsive avatar-view partial-profile-img" id="profileImgUrl" ng-src="{{IndividualPaymentDetail.ImageUrl}}" alt="Avatar" title="Change the avatar">
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-8 col-xs-12 invoice-col">
+                            Student Detail
+                            <address>
+                                <strong>Student Name: {{IndividualPaymentDetail.FullName}}</strong>
+                                <br><b>Roll no.:</b> {{IndividualPaymentDetail.rollno}}
+                                <br><b>Class-Section:</b> {{IndividualPaymentDetail.Class}} - {{IndividualPaymentDetail.Section}}
+                                <br><b>Registration no.:</b>{{IndividualPaymentDetail.registrationNo}}
+                                <input type="hidden" id="studentUid" value="{{IndividualPaymentDetail.studentUid}}" />
+                            </address>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <!-- Table row -->
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-xs-12 card-info">
+                            For single month payment press card <b><i>Pay now</i></b> button<br />
+                            - or -<br />
+                            Select check box's present on top left corner of the card. And press <b><i>Proceed to payment</i></b>.
+                        </div>
+                        <div class="col-xs-12 table card-table">
+                            <div class="flex-dv col-md-8 col-lg-8 col-sm-8">
+                                <div class="Card-mini-title">
+                                    Select below option and make payment.
+                                </div>
+                                <div name="pamentcard" class="payment-card {{item.Class}}"
+                                     ng-repeat="item in PaymentMonthlyList" style="background-color: {{item.Month.color}};color: {{item.Month.text}};">
+                                    <div class="{{item.PaidMonthClass}}" disabled="disabled" style="display: none;"><p>Already paid</p></div>
+                                    <input type="hidden" name="monthnumber" value="{{item.Month.monthNumber}}" />
+                                    <input type="hidden" name="finecode" value="{{item.FineCode}}" />
+                                    <div class="corner-checkbox checkbox checkbox-success">
+                                        <input type="hidden" value="{{item.Payment}}" />
+                                        <input id="checkbox{{item.Sno}}" ng-change="CalculateAmount()" ng-model="currentAmount" type="checkbox">
+                                        <label for="checkbox{{item.Sno}}">
+                                        </label>
+                                    </div>
+                                    <p class="card-title" style="color: {{item.Month.text}};"><b>{{item.Month.name}}</b></p>
+                                    <div class="card-content">
+                                        <p><b>Total amount :</b>&nbsp;{{item.Payment}}</p>
+                                        <p><b>Status :</b>&nbsp;{{item.Status}}</p>
+                                        <p><b>Class-Sec :</b>&nbsp;{{item.ClassSection}}</p>
+                                    </div>
+                                    <div class="card-action">
+                                        <button type="button" style="background-color: {{item.Month.text}}; color: {{item.Month.color}}" ng-click="return DoPayment()" class="btn block">
+                                            <i class="fa fa-inr"></i>Pay now
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="virtical-bar"></div>
+                            </div>
+                            <div class="col-xs-4 payment-sum">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Month</th>
+                                                <th>Fine</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="pay in FeesDetailList">
+                                                <td>{{pay.MonthName}}</td>
+                                                <td><i class="fa fa-inr"></i>&nbsp;{{pay.FineAmount}}</td>
+                                                <td><i class="fa fa-inr"></i>&nbsp;{{pay.Amount + pay.FindAmount}}</td>
+                                            </tr>
+                                            <tr id="paymentsum" style="display: none;">
+                                                <td colspan="2">
+                                                    <div><b>Total amount to paid: </b></div>
+                                                </td>
+                                                <td colspan="2">
+                                                    <i class="fa fa-inr">{{TotalSumAmount}}</i>
+                                                </td>
+                                            </tr>
+                                            <tr id="paymentmsg">
+                                                <td colspan="3">
+                                                    <div class="payment-info">For multiple months payment select cards.</div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button style="width: 100%;" class="btn btn-success block" ng-click="DoPayment()"><i class="fa fa-credit-card"></i> Proceed to payment</button>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <form method="post" action="/SellGoods/OpenPayUMoney">
+                            <button type="submit" id="btnform" style="display: none;">Submit</button>
+                            <input type="hidden" id="formcollectionData" name="formcollectionData" value="" />
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var PaymentData = @Html.Raw(@ViewBag.PartialViewData);
+</script>

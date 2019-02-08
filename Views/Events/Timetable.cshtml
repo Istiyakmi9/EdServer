@@ -1,0 +1,224 @@
+﻿
+@{
+    ViewBag.Title = "Timetable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/timetable.css" rel="stylesheet" />
+<div class="right_col" role="main" ng-controller="timeTableCtrl">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <input type="hidden" id="searchstring" value="" />
+        <input type="hidden" id="pageindex" value="" />
+        <input type="hidden" id="sortby" value="" />
+
+        <div class="modal fade" id="addTimetable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Routine Allocation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="timetableMsg">
+                        <div class="" id="timetableMsg-selection">
+                            <div class="form-horizontal form-label-left">
+                                <div class="assign-text">
+                                    Choose and assign faculty for selected period.
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12" style="height: 30px;margin-top: 10px;">
+                                        <label class="col-md-3 col-sm-3 col-xs-12" style="padding-top: 0px;">Show all Names:</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12">
+                                            <input type="checkbox" style="margin: 0px;zoom: 1.4;" ng-model="EnableNames" ng-change="Enableall()"
+                                                   name="enableallNames" id="enableallNames" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Choose subject</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select class="select2_single form-control" id="subjectName" ng-model="SelectedSubject" ng-change="SelectFaculty()" tabindex="-1">
+                                            <option value="">Select subject</option>
+                                            <option ng-repeat="sub in SubjectList" value="{{sub.SubjectId}}">{{sub.subjectName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="faculty-sel-dv">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Assign Faculty To</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <select disabled class="select2_single form-control" id="facultName" tabindex="-1" ng-model="AllocatedFaculty">
+                                            <option value="" selected="selected">Select Faculty</option>
+                                            <option ng-repeat="faculty in FilteredFacultyDetail" value="{{faculty.FacultyUid}}">
+                                                {{faculty.FacultyName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="message-dv" style="display: none;">
+                            <div class="row">
+                                <div class="form-group" id="faculty-sel-dv" style="padding-left: 10%;">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Period</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <label class="control-label col-md-12 col-sm-12 col-xs-12">{{VarifyAllocation.Period}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="faculty-sel-dv" style="padding-left: 10%;">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Day Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <label class="control-label col-md-12 col-sm-12 col-xs-12">{{VarifyAllocation.DayName}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="faculty-sel-dv" style="padding-left: 10%;">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Subject Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <label class="control-label col-md-12 col-sm-12 col-xs-12">{{VarifyAllocation.SubjectName}}</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="faculty-sel-dv" style="padding-left: 10%;">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Faculty Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <label class="control-label col-md-12 col-sm-12 col-xs-12">{{VarifyAllocation.FacultyName}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnTimetableCancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="btnTimetableAssign" class="btn btn-primary dn" ng-click="ConfirmChanges()" data-dismiss="modal">Assign now</button>
+                        <button type="button" id="btnTimetableOk" class="btn btn-primary" ng-click="ShowConfirmation()">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Timetable <small>View school time table by class/section.</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="row filter-dv">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-md-6 col-sm-6 col-xs-12 filter-sel">
+                            <label class="col-lg-3 col-md-3 col-xs-12">Class</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" ng-model="selectedClass" ng-change="BindSection()" id="Class" name="Class">
+                                    <option value="">Select Class</option>
+                                    <option ng-repeat="item in ClassDetail" value="{{item}}">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12 filter-sel">
+                            <label class="col-lg-3 col-md-3 col-xs-12">Section</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" id="section" ng-model="SelecedSection" ng-change="BackToNormal()" name="section" disabled>
+                                    <option value="">Choose Section</option>
+                                    <option ng-repeat="sec in SectionDetail" value="{{sec.ClassDetailId}}">{{sec.Section}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12" style="text-align: right;">
+                        <button class="btn btn-default" ng-click="ResetFilterResult()">
+                            <i class="fa fa-refresh"></i>&nbsp;Reset
+                        </button>
+                        <button class="btn btn-success" ng-click="FilterTimetable()">
+                            <i class="fa fa-filter"></i>&nbsp;Filter timetable
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="table-responsive">
+                        <div ng-switch="RecordAvailable" id="timetable-body">
+                            <div class="table-responsive" id="timetable-dv" style="display: none;" ng-switch-when="1">
+                                <div class="period-row">
+                                    <div class="timetable-cell day-head">
+                                        <div class="header-dv" style="transform: translateY(50%)">Day</div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-12 timetable-cell center" ng-repeat="header in TimetableDetail[0]">
+                                        <div class="full">Period: {{$index + 1}}</div>
+                                        <div class="full"><small>{{header.StartTime}} - {{header.EndTime}}</small></div>
+                                    </div>
+                                </div>
+                                <div ng-repeat="days in TimetableDetail track by $index" class="timetable-row" ng-class="{'t-striped': $odd}">
+                                    <div class="period-row">
+                                        <div class="timetable-cell day-head">
+                                            <div class="header-dv" style="transform: translateY(150%)">{{days[0].DayName | limitTo: 2}}</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 timetable-cell" ng-repeat="item in days">
+                                            <div class="period-detail">
+                                                <div class="subject-dv">{{item.SubjectName}}</div>
+                                                <div class="teacher-dv" name="full-info">
+                                                    {{item.TeachName}}
+                                                </div>
+                                                <div class="events-div" name="full-info">
+                                                    <input type="hidden" value={{item.TeachUid}} name="TeachUid" />
+                                                    <input type="hidden" value="{{item.TimetableUid}}" name="TimetableUid" />
+                                                    <input type="hidden" name="Period" value="{{item.Period}}" />
+                                                    <input type="hidden" name="TeachName" value="{{item.TeachName}}" />
+                                                    <input type="hidden" name="DayName" value="{{days[0].DayName}}" />
+                                                    <a class="change-anc" ng-click="ShowAddEditTimetable()">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-switch-default class="default-msg-dv">
+                                <div id="default-msg" style="display: none;">
+                                    <i class="fa fa-filter" ng-show="SearchResult"></i>
+                                    <i class="fa fa-exclamation-triangle" style="color: red;" ng-show="!SearchResult"></i>
+                                    {{DefaultMessage}}<br />
+                                    <small ng-show="SearchResult"><i>Press Filter button to process filtering.</i></small>
+                                    <small ng-show="!SearchResult" style="color: red;"><i>Error encountered.</i></small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="animationload" id="loader" style="display: none;">
+                            <div class="osahanloading">
+                            </div>
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/timetable.js"></script>
+<script type="text/javascript">
+    var Subject = @Html.Raw(@ViewBag.Subjects);
+</script>

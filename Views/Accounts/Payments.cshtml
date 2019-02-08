@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewBag.Title = "Payments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/attendence.css" rel="stylesheet" />
+<div class="right_col" role="main" ng-controller="paymentCtrl">
+    <div class="" id="attendence-table">
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>New Registration <small>Faculty, Members and Staff's</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#">Settings 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="myTabContent" class="tab-content">
+                        <div role="tabpanel" class="" id="tab_content2" aria-labelledby="attendence-all">
+                            <div id="resultlist" class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_content">
+                                    <div class="col-md-10 col-sm-10 col-xs-12">
+                                        <form class="form-inline">
+                                            <div class="form-group">
+                                                <label for="ddlclass">Class</label>
+                                                <select class="form-control" ng-model="studForm.Class" ng-change="BindSection()" id="Class" name="Class">
+                                                    <option value="">Choose Class</option>
+                                                    <option ng-repeat="item in ClassDetail track by $index" value="{{item}}">{{item}}</option>
+                                                </select>
+                                            </div>&emsp;
+                                            <div class="form-group">
+                                                <label for="ddlsection">Section</label>
+                                                <select class="form-control" ng-model="selectedSection" id="section" name="section">
+                                                    <option value="">Choose Section</option>
+                                                    <option ng-repeat="sec in SectionDetail" value="{{sec.ClassDetailId}}">{{sec.Section}}</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-2 col-sm-2 col-xs-12" style="text-align: right;">
+                                        <button class="btn btn-primary block" ng-click="GetPaymentDetail()">
+                                            <i class="fa fa-filter"></i>
+                                            Filter now
+                                        </button>
+                                    </div>
+                                    <div class="row" style="border-bottom: 1px solid #d9d9d9;">
+                                        <div class="col-sm-5">
+                                            <div class="dataTables_info" id="datatable_info" role="status" aria-live="polite">
+                                                Showing {{fromCount}} to {{toCount}} of {{recordDetail.total}} entries
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <div class="dataTables_paginate paging_simple_numbers" id="paging-dv">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- start project list -->
+                                    <div class="fixed-col-auto">
+                                        <div class="scroll-space hidden-scrollbar" style="height: 40px;">
+                                            <table class="table table-striped projects" style="margin-bottom: -10px;">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 20%">Student Name</th>
+                                                        <th style="width: 25%">Last Payment Date</th>
+                                                        <th style="width: 30%">Last Payment Month/Year</th>
+                                                        <th style="width: 15%">Status</th>
+                                                        <th style="width: 10%">Paynow</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div class="scrollable-section" ng-switch="IsRecord">
+                                            <div id="data-body" style="display: none;">
+                                                <table ng-switch-when="1" class="table table-striped projects" style="margin-bottom: -10px;">
+                                                    <tbody>
+                                                        <tr ng-repeat="record in Records">
+                                                            <td style="width: 20%">
+                                                                <b>{{record.FullName}}</b><br />
+                                                                Reg No: {{record.registrationNo}} <br /> Roll No: = {{record.rollno}}
+                                                            </td>
+                                                            <td style="width: 25%" class="project_progress">
+                                                                <span>{{record.AddedOn}}</span>
+                                                            </td>
+                                                            <td style="width: 30%">
+                                                                {{record.PaymentMonthYear}}
+                                                            </td>
+                                                            <td style="width: 15%">
+                                                                {{record.Status}}
+                                                            </td>
+                                                            <td style="width: 10%;">
+                                                                <input type="hidden" value="{{record.studentUid}}" name="studentUid" />
+                                                                <a href="javascript:void(0)" class="btn btn-info btn-xs" ng-click="GetIndividualPaymentDetail()"><i class="fa fa-inr"></i> Pay</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div ng-switch-default class="default-msg-dv">
+                                                <i class="fa fa-filter"></i>
+                                                Please select class and section to get filtered result.<br />
+                                                <small><i>Press Filter button to process filtering.</i></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="animationload" id="loader" style="display: none;">
+                                        <div class="osahanloading">
+                                        </div>
+                                        Loading...
+                                    </div>
+                                    <!-- end project list -->
+                                </div>
+                            </div>
+                            <div id="payment-dv" style="display: none;" class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="breadcrum">
+                                    <ul>
+                                        <li>
+                                            <a href="javascript:void(0)" ng-click="GoPaymentViewPage()">PaymentView (Previous page) </a><i class="fa fa-angle-double-right"></i>
+                                        </li>
+                                        <li>
+                                            <span href="javascript:void(0)">Paynow</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div id="paymentoption" class="col-md-12 col-sm-12 col-xs-12"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/payments.js"></script>
+<script type="text/javascript">
+    var Data = @Html.Raw(@ViewBag.AttendenceSet);
+</script>

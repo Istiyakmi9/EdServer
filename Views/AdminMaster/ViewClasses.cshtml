@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewBag.Title = "ViewClasses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="master">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="padding: 10px 4px !important;">
+            <input type="hidden" id="CurrentClassDetailId" />
+            <input type="hidden" id="searchstring" />
+            <input type="hidden" id="sortby" />
+            <input type="hidden" id="currentpageindex" />
+            <div class="x_title">
+                <h2>Class Detail <small>Add class/section detail</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12" style="background-color: #eee; padding-bottom: 16px;">
+                    <div class="x_title" style="margin-top: 28px;">
+                        <h2>School class <small>View class and section</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label for="SelectedClass">Class &nbsp;<span style="color: red;">*</span></label>
+                            <select class="form-control" id="class">
+                                <option value="" selected="selected">Choose Class</option>
+                                <option ng-repeat="class in ClassDetail track by $index" value="{{class}}">{{class}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="section">Section &nbsp;<span style="color: red;">*</span></label>
+                            <select class="form-control" id="section">
+                                <option value="" selected="selected">Choose Section</option>
+                                <option ng-repeat="sec in Sections track by $index" value="{{sec}}">{{sec}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="totalseats">No. of seats &nbsp;<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" required="required" id="totalseats" placeholder="No. Of Seats">
+                        </div>
+                        <div class="form-group">
+                            <label for="gseats">Seats for girls</label>
+                            <input type="text" class="form-control" required="required" id="gseats" placeholder="Seats girls">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bseats">Seats for boys</label>
+                            <input type="text" class="form-control" required="required" id="bseats" placeholder="Seats for boys">
+                        </div>
+
+                        <div class="form-group" style="margin-top: 40px;">
+                            <button type="button" class="btn btn-default" ng-click="ResetForm()">
+                                <i class="fa fa-undo"></i>&nbsp;Reset
+                            </button>
+                            <button type="button" class="btn btn-primary" ng-click="addNewClass()">
+                                <i class="fa fa-floppy-o"></i>
+                                Save Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8 col-lg-8 col-sm-8 col-xs-12">
+                    <div id="maindv">
+                        <div class="actionBar">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="filterclass">Class</label>
+                                    <select class="form-control" id="filterclass" ng-model="SelectedClass">
+                                        <option value="" selected="selected">Choose Class</option>
+                                        <option ng-repeat="class in ClassDetail track by $index" value="{{class}}">{{class}}</option>
+                                    </select>
+                                </div>&ensp;
+                                <div class="form-group">
+                                    <label for="filtersection">Section</label>
+                                    <select class="form-control" id="filtersection">
+                                        <option value="" selected="selected">Choose Section</option>
+                                        <option ng-repeat="sec in Sections track by $index" value="{{sec}}">{{sec}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="pull-right">
+                                    <a href="javascript:void(0)" id="nextbtn" ng-click="FilterRecord()" class="buttonNext btn btn-success pull-right">
+                                        <i class="fa fa-filter"></i> Filter
+                                    </a>
+                                    <a href="javascript:void(0)" id="nextbtn" ng-click="ResetFilter()" class="buttonNext btn btn-default pull-right">
+                                        <i class="fa fa-undo"></i>&nbsp;Reset
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="viewfeestimetable-dv" style="display: none;">
+                            <div class="table-responsive">
+                                <div class="table-responsive">
+                                    <div class="dyn-table">
+                                        <div class="column-title">Class </div>
+                                        <div class="column-title">Section </div>
+                                        <div class="column-title">Girls</div>
+                                        <div class="column-title">Boys</div>
+                                        <div class="column-title">Total </div>
+                                        <div class="column-title">Available</div>
+                                        <div class="column-title no-link last">
+                                            <span class="nobr">Action</span>
+                                        </div>
+                                        <div class="bulk-actions" colspan="7">
+                                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="dyn-body">
+                                        <div ng-repeat="item in RecordsArray track by $index" name="table" class="dyn-body-item" ng-class="{'t-striped': $odd}">
+                                            <div name="class" class="pl-3" value="{{item.Class.name}}">{{item.Class.value}}</div>
+                                            <div name="section" class="pl-3" value="{{item.Section}}">{{item.Section}}</div>
+                                            <div name="gseats" class="pl-3" value="{{item.GirlSeats}}">{{item.GirlSeats}}</div>
+                                            <div name="bseats" class="pl-3" value="{{item.BoySeats}}">{{item.BoySeats}}</div>
+                                            <div name="totalseats" class="pl-3" value="{{item.TotalSeats}}">{{item.TotalSeats}}</div>
+                                            <div name="availableseats" class="pl-3" value="{{item.Available}}">{{item.Available}}</div>
+                                            <div class="last">
+                                                <input type="hidden" name="classid" value="{{item.ClassDetailId}}" />
+                                                <a href="javascript:void(0)" class="tbl-action-icon-style" style="margin-right: 10px;" ng-click="EditCurrentRecord()">
+                                                    <i class="fa fa-pencil-square-o"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-sm-6">
+                                    <div class="dataTables_info" id="datatable_info" role="status" aria-live="polite">
+                                        Showing {{fromCount}} to {{toCount}} of {{recordDetail.total}} entries
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="dataTables_paginate paging_simple_numbers" id="paging-dv">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="default-msg-dv dn">
+                        <div id="default-msg" style="display: none;">
+                            <i class="fa fa-filter" ng-show="SearchResult"></i>
+                            <i class="fa fa-exclamation-triangle" style="color: red;" ng-show="!SearchResult"></i>
+                            {{DefaultMessage}}<br />
+                            <small ng-show="SearchResult"><i>Press Filter button to process filtering.</i></small>
+                            <small ng-show="!SearchResult" style="color: red;"><i>Error encountered.</i></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var Type = @Html.Raw(@ViewBag.Type);
+    var Data = @Html.Raw(@ViewBag.Vehicles);
+</script>
+<script src="~/Scripts/admin-master.js"></script>

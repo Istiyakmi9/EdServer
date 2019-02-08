@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "ProfitAndLoss";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" ng-controller="profitAndLossCtrl">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div id="table">
+                    <div class="d-flex bg-info d-table-head">
+                        <div class="w-25">Class/Sec</div>
+                        <div class="w-25">Strenth</div>
+                        <div class="w-25">Month</div>
+                        <div class="w-25">Collection</div>
+                        <div class="w-25">View</div>
+                    </div>
+                    <div ng-repeat="item in [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]" class="d-table d-flex  mt-2 mb-2">
+                        <div class="w-25">Class/Sec</div>
+                        <div class="w-25">Strenth</div>
+                        <div class="w-25">Month</div>
+                        <div class="w-25">Collection</div>
+                        <div class="w-25">View</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/profitAndLoss.js"></script>

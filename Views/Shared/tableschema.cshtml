@@ -1,0 +1,181 @@
+﻿<div class="row" style="margin-bottom: 8px;">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <label style="padding-top: 8px;" class="control-label col-md-2 col-sm-2 col-xs-12" for="first-name">
+            Table name
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <input type="text" id="tablename" ng-keypress="enableField()" required="required" class="form-control col-md-7 col-xs-12">
+        </div>
+    </div>
+</div>
+<div class="">
+    <div style="overflow-y: scroll;">
+        <div class="hideScroller"></div>
+        <table name="header" style="margin-bottom: 0px;" class="databaseTable table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 4%;">#</th>
+                    <th style="width: 26%;">Column</th>
+                    <th style="width: 16%;">Datatype</th>
+                    <th class="tickColumn">PK</th>
+                    <th class="tickColumn">NULL</th>
+                    <th class="tickColumn">UQ</th>
+                    <th class="tickColumn">BIN</th>
+                    <th class="tickColumn">UF</th>
+                    <th class="tickColumn">ZF</th>
+                    <th class="tickColumn">AL</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="">
+        <div class="tabelbodyDv">
+            <table name="databaseTable" style="margin-bottom: 0px;" class="databaseTable table table-bordered">
+                <tbody id="dynamic-row">
+                    <tr name="row" ng-repeat="col in [1]">
+                        <td class="" style="width: 4%; text-align:center" ng-click="selectRow()">
+                            1
+                        </td>
+                        <td style="width: 26%;">
+                            <input type="text" name="column" ng-keydown="hideError()" class="txtNoBoarder" placeholder="Column name">
+                        </td>
+                        <td style="width: 16%;">
+                            <div class="select-editable">
+                                <select class="newtype" ng-focus="getInitValue()" name="select-option" ng-model="datatype" ng-change="openSelection()">
+                                    <option selected="selected" value="">DATATYPE</option>
+                                    <option value="VARCHAR(10)">VARCHAR(10)</option>
+                                    <option value="INT">INT</option>
+                                    <option value="BIT">BIT</option>
+                                    <option value="DATETIME">DATETIME</option>
+                                </select>
+                                <input type="text" placeholder="DATATYPE" name="datatype" style="padding-left: 4px;" value="" />
+                            </div>
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" ng-click="checkPrimary()" name="pk" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="null" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="uq" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="bin" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="uf" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="zf" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="al" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="" style="width: 4%; text-align:center"></td>
+                        <td style="width: 26%;" ng-click="addNewEntry()">
+                            < click to edit >
+                        </td>
+                        <td style="width: 16%;padding-left: 4px !important;" disabled="disabled">
+                            DATATYPE
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="pk" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="nn" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="uq" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="bin" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="uf" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="zf" />
+                        </td>
+                        <td class="tickColumn">
+                            <input type="checkbox" class="chkStyle" name="al" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px;margin-top:4px;">
+            <div class="x_panel">
+                <div class="x_content">
+                    <p>Add small overlays of content for housing secondary information.</p>
+                    <!-- start pop-over -->
+                    <div class="bs-example-popovers">
+                        <div class="col-md-6 col-sm-6 col-xs-12" style="border: 1px solid #d9d9d9;min-height:100px;"></div>
+                        <div class="col-md-6 col-sm-6 col-xs-12" style="text-align: center;">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="datatypewithsize" style="padding-top: 8px;">
+                                        Datatype
+                                    </label>
+                                    <div class="col-md-8 col-sm-8 col-xs-12">
+                                        <input type="text" id="datatypewithsize" style="padding-left: 10px;" required="required" class="txtfull">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="selectedDatatype" style="padding-top: 8px;">
+                                        Default value
+                                    </label>
+                                    <div class="col-md-8 col-sm-8 col-xs-12">
+                                        <input type="text" id="selectedDatatype" required="required" class="txtfull">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="checkbox chk-space">
+                                    <label style="width: 70px;">
+                                        <input type="checkbox" value=""> PK
+                                    </label>
+                                </div>
+                                <div class="checkbox chk-space">
+                                    <label style="width: 70px;">
+                                        <input type="checkbox" value=""> UQ
+                                    </label>
+                                </div>
+                                <div class="checkbox chk-space">
+                                    <label style="width: 70px;">
+                                        <input type="checkbox" value=""> BIN
+                                    </label>
+                                </div>
+                                <div class="checkbox chk-space">
+                                    <label style="width: 70px;">
+                                        <input type="checkbox" value=""> UF
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="checkbox chk-space">
+                                    <label style="width: 70px;">
+                                        <input type="checkbox" value=""> ZF
+                                    </label>
+                                </div>
+                                <div class="checkbox chk-space">
+                                    <label style="width: 70px;">
+                                        <input type="checkbox" value=""> AL
+                                    </label>
+                                </div>
+                                <div class="checkbox chk-space">
+                                    <label style="width: 70px;">
+                                        <input type="checkbox" value=""> FK
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="button" class="new-btn btn btn-primary" ng-click="executeQuery()">Execute</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

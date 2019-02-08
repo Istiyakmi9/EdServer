@@ -1,0 +1,296 @@
+﻿
+@{
+    ViewBag.Title = "SellNow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="~/Content/goodsandvendor.css" rel="stylesheet" />
+<div class="right_col" role="main">
+    <div ng-controller="sellGoodsCtrl" id="sellgoods" ng-click="hideDynamicDdl()">
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px;">
+                <input type="hidden" id="searchstring" value="" />
+                <input type="hidden" id="pageindex" value="" />
+                <input type="hidden" id="sortby" value="" />
+                <div class="x_panel">
+                    <div class="x_title">
+                        <div class="breadcrum">
+                            <ul>
+                                <li id="link-info">
+                                    <h2>Selling Item(s)<small>Sell item(s) to your customer</small></h2>
+                                </li>
+                                <li name="breadcrum" style="display: none;">
+                                    <a href="javascript:void(0)" ng-click="GoPaymentViewPage()">PaymentView (Previous page) </a><i class="fa fa-angle-double-right"></i>
+                                </li>
+                                <li name="breadcrum" style="display: none;">
+                                    <span href="javascript:void(0)">Paynow</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="main-section" id="main">
+                        <div class="actionBar Client-selection" style="border: none;">
+                            <div class="" id="select-Client">
+                                <label class="control-label col-md-1 col-sm-1 col-xs-12 lbl-name">Client Name</label>
+                                <div class="col-md-4 col-sm-4 col-xs-12">
+                                    <select class="form-control col-md-4 col-xs-4" type="select" id="SelClient" ng-model="Client.ExistingClientUid" name="ExistingClientUid"
+                                            ng-click="validateDropDown()">
+                                        <option selected="selected" value="">Select Client</option>
+                                        <option ng-repeat="objClient in ClientRecord" value="{{objClient.ClientUid}}">
+                                            {{objClient.PersonName}} &nbsp;[{{objClient.ShopName}}]
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <a href="javascript:void(0)" id="prevbtn" ng-click="AddClient()" class="buttonPrevious btn btn-primary">Add Client</a>
+                        </div>
+                        <div id="Client-dv" class="row" style="display: none;">
+                            <div class="col-md-12 col-xs-12 x_panel">
+                                <div class="x_title">
+                                    <h2>Add New Client<small>Complete information about Client</small></h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="x_panel">
+                                        <div class="x_title" style="margin-bottom: 0px;">
+                                            <h2>Client Personal Detail <small>Insert Client specific information.</small></h2>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="x_content">
+                                            <br />
+                                            <div class="form-horizontal form-label-left input_mask">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="padding-left: 0px;padding-right: 0px;">
+                                                        Shop Name<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-11 col-sm-11 col-xs-12">
+                                                        <input type="text" id="ShopName" name="ShopName" class="form-control" ng-keyup="validateInput()"
+                                                               placeholder="Shop Name" ng-model="Client.ShopName" value="" validate="1">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                                    <input type="text" class="form-control has-feedback-left" id="FirstName" name="FirstName" ng-keyup="validateInput()"
+                                                           placeholder="Client First Name" ng-model="Name.FirstName" value="" validate="1">
+                                                    <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                                    <input type="text" class="form-control" id="LastName" name="LastName" ng-keyup="validateInput()"
+                                                           placeholder="Client Last Name" ng-model="Name.LastName" value="">
+                                                    <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                                    <input type="text" class="form-control has-feedback-left" id="Email" name="Email" ng-keyup="validateInput()"
+                                                           placeholder="Email" ng-model="Client.Email" value="">
+                                                    <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                                    <input type="text" class="form-control" id="Mobile" name="Mobile" ng-keyup="validateInput()" validate="1"
+                                                           ng-keypress="maskmobile()" placeholder="Mobile number" ng-model="Client.Mobile" value="">
+                                                    <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                                                </div>
+                                                <div class="x_title" style="margin-bottom: 10px;margin-top: 110px;">
+                                                    <h2>Bank Account<small>Insert bank account related information.</small></h2>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="width: 10%;">BankName</label>
+                                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                                        <select class="form-control col-md-4 col-xs-4" type="select" id="BankName" ng-model="Client.BankName" name="BankName"
+                                                                ng-change="validateDropDown()">
+                                                            <option selected="selected" value="">Select Bank</option>
+                                                            <option value="HDFC">HDFC</option>
+                                                            <option value="ICICI">ICICI</option>
+                                                            <option value="Kotak Mahindra">Kotak Mahindra</option>
+                                                            <option value="SBI">SBI</option>
+                                                            <option value="UBI">Union bank of India</option>
+                                                            <option value="Axis">Axis Bank</option>
+                                                            <option value="CBI">Central bank of India</option>
+                                                            <option value="IDBI">IDBI</option>
+                                                            <option value="BOI">Bank of India</option>
+                                                            <option value="Canara Bank">Canara Bank</option>
+                                                            <option value="Yes Bank">Yes Bank</option>
+                                                            <option value="HSBC">HSBC</option>
+                                                            <option value="Syndicate Bank">Syndicate Bank</option>
+                                                            <option value="UCO Bank">UCO Bank</option>
+                                                            <option value="Allahabad Bank">Allahabad Bank</option>
+                                                            <option value="Bank of baroda">Bank of baroda</option>
+                                                            <option value="Indusland">Indusland</option>
+                                                            <option value="Other Bank">Other Bank</option>
+                                                        </select>
+                                                    </div>
+                                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="width:15%;">Account No.</label>
+                                                    <div class="col-md-5 col-sm-5 col-xs-12">
+                                                        <input type="text" name="AccountNo" id="AccountNo" placeholder="Account No." ng-model="Client.AccountNo"
+                                                               ng-keyup="validateInput()" class="form-control col-md-10" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="width: 10%;">IFSC Code</label>
+                                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                                        <input type="text" name="IFSCCode" id="IFSCCode" placeholder="IFSC Code" ng-model="Client.IFSCCode" ng-keyup="validateInput()"
+                                                               class="form-control col-md-10" />
+                                                    </div>
+                                                    <label class="control-label col-md-1 col-sm-1 col-xs-12" style="width: 15%;">
+                                                        GSTIN No.<span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-5 col-sm-5 col-xs-12">
+                                                        <input type="text" id="GSTIN" name="GSTIN" class="form-control" ng-keyup="validateInput()"
+                                                               placeholder="Your GST IN" ng-model="Client.GSTIN" value="" validate="1">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" style="margin-bottom: 4px;margin-top:7px;">
+                                                    <label class="control-label col-md-12 col-sm-12 col-xs-12" style="text-align:left;margin-bottom: 6px;">
+                                                        Address <span class="required">*</span>
+                                                    </label>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <textarea type="text" class="form-control" rows="4" ng-keyup="validateInput()" ng-model="Client.FullAddress"
+                                                                  id="FullAddress" name="FullAddress" placeholder="Address" validate="1"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="x_content">
+                            <div class="table-responsive">
+                                <table class="table table-striped jambo_table bulk_action Client-table">
+                                    <thead>
+                                        <tr class="headings">
+                                            <th class="column-title">Item</th>
+                                            <th class="column-title">Company</th>
+                                            <th class="column-title">Item name</th>
+                                            <th class="column-title" style="width: 10%;">Price</th>
+                                            <th class="column-title" style="width: 8%;">M/Qty</th>
+                                            <th class="column-title" style="width: 8%;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sellingitem-body">
+                                        <tr id="first-item" name="record-row" tabindex="0">
+                                            <td>
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="Item" ng-keyup="maskTextBox()"
+                                                           placeholder="Item" value="">
+                                                    <a ng-click="showoptions()" class="fa fa-angle-down right" aria-hidden="true"></a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="Company" ng-keyup="maskTextBox()"
+                                                           placeholder="Company name" value="">
+                                                    <a ng-click="showCompany()" class="fa fa-angle-down right" aria-hidden="true"></a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="ItemName" ng-keyup="maskTextBox()"
+                                                           placeholder="Item name" value="">
+                                                    <a ng-click="showItemName()" class="fa fa-angle-down right" aria-hidden="true"></a>
+                                                </div>
+                                            </td>
+                                            <td style="width: 10%;">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="SellingPrice" ng-keypress="OnlyFloat()"
+                                                           ng-keyup="CalculateAmount()" placeholder="S-Price" value="">
+                                                </div>
+                                            </td>
+                                            <td style="width: 8%;">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="MQty" ng-keypress="Money()"
+                                                           ng-keyup="CalculateAmount()" placeholder="M/Qty" value="">
+                                                </div>
+                                            </td>
+                                            <td style="width: 8%;">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="Total" ng-keypress="CloneNew()"
+                                                           ng-keyup="maskTextBox()" placeholder="Total" value="">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr id="default">
+                                            <td>
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="Item" ng-click="varifyAddRow()"
+                                                           placeholder="<Add Item>" value="">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="ItemName" ng-click="varifyAddRow()"
+                                                           placeholder="<Add Item name>" value="">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="Company" ng-click="varifyAddRow()"
+                                                           placeholder="<Add Company name>" value="">
+                                                </div>
+                                            </td>
+                                            <td style="width: 10%;">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="SellingPrice" ng-click="varifyAddRow()"
+                                                           ng-keyup="maskTextBox()" placeholder="<Price>" value="">
+                                                </div>
+                                            </td>
+                                            <td style="width: 8%;">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="M/Qty" ng-click="varifyAddRow()"
+                                                           ng-keyup="maskTextBox()" placeholder="<M/Qty>" value="">
+                                                </div>
+                                            </td>
+                                            <td style="width: 8%;">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 no-spacing form-group has-feedback">
+                                                    <input type="text" class="form-control" name="Total" ng-click="varifyAddRow()"
+                                                           ng-keyup="maskTextBox()" placeholder="<Total>" value="">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="calculated-dv">
+                                <div>Grand item and price</div>
+                                <table>
+                                    <tr>
+                                        <td><div class="right-space">Total Items</div></td>
+                                        <td><div>{{TotalItemCount}}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="right-space">Discound in %</div></td>
+                                        <td><div>0</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="right-space">Dicount in Rs.</div></td>
+                                        <td><div>0</div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="right-space">Grand total amount in &emsp;(<i class="fa fa-inr"></i>)</div></td>
+                                        <td><div>&nbsp;{{GrandTotalPrice}}</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="action-dv">
+                                <button href="javascript:void(0)" id="nextbtn" ng-click="resetall()" class="buttonNext btn btn-success">Reset</button>
+                                <button ng-click="MakePaymentTransaction()" href="javascript:void(0)" id="prevbtn" class="buttonPrevious btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-section" id="invoice" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="/EdServer/SellGoods/OpenPayUMoneyForClient" method="post">
+        <input type="hidden" name="formcollectionData" id="formcollectionData" value="" />
+        <button type="submit" id="btnform" style="display: none;"></button>
+    </form>
+</div>
+<script src="~/Scripts/printThis.js"></script>
+<script type="text/javascript">
+    var ClientRecord = @Html.Raw(@ViewBag.ClientRecord)
+</script>
+<script src="~/Scripts/sellitem.js"></script>

@@ -1,0 +1,453 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @*Bootstrap v3.3.7 (http://getbootstrap.com)*@
+    <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="~/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="~/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- ******************************************************************************* -->
+    <!-- bootstrap-progressbar -->
+
+    <link href="~/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="~/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    <link href="~/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="~/Content/custom.css" rel="stylesheet" />
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/localstorage.js"></script>
+    <script src="~/Scripts/ajaxcall.js"></script>
+    <script src="~/Scripts/layout.js"></script>
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body class="nav-md">
+    <div class="container body" ng-app="eds" ng-controller="layoutController">
+        <!-- Modal -->
+        <input type="hidden" id="searchstring" value="" />
+        <input type="hidden" id="pageindex" value="" />
+        <input type="hidden" id="sortby" value="" />
+        <input type="hidden" id="token-txt" value="" />
+        <div class="fadeloadscreen" id="fadeloadscreen">
+            <div class="loading">Loading&#8230;</div>
+        </div>
+        <div class="modal fade" id="ppalert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Server Result Modal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="ppmsg">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnlayoutCancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="btnlayoutOk" class="btn btn-primary" ng-click="confirmAndRedirect()" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="loader" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Processing Modal</h5>
+                    </div>
+                    <div class="modal-body" id="ppmsg" style="padding-bottom: 50px;">
+                        <blockquote>
+                            <p>Your request is under process. Please wait.</p>
+                            <footer class="pull-right" style="padding: initial !important;margin-top: -5px;">Time elapsed: <span id="timer">00:00:00</span></footer>
+                        </blockquote>
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                             aria-valuemax="100" aria-valuemin="0" style="width: 100%;height: 24px;border-radius: 3px;line-height: 24px;">
+                            <span style="font-size: 15px;">Loading ...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="ppconfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Alert Message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="confirmMsg">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="register()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*Modal ends*@
+        <div class="main_container" ng-click="HideDynamicContent()">
+            <div class="col-md-3 left_col menu_fixed mCustomScrollbar _mCS_1 mCS-autoHide fixed-panel">
+                <div class="left_col scroll-view hide-scroll" id="menu-scroller">
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a href="../Home/Dashboard" class="site_title"><i class="fa fa-paw"></i> <span>{{UserBO.SchoolName}}</span></a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- menu profile quick info -->
+                    <div class="profile clearfix">
+                        <div class="profile_pic">
+                            <img src="~/images/default-user.png" alt="User" class="img-circle profile_img" />
+                        </div>
+                        <div class="profile_info">
+                            <span>Welcome,</span>
+                            <h2>{{UserBO.FirstName}} {{UserBO.LastName}}</h2>
+                        </div>
+                    </div>
+                    <!-- /menu profile quick info -->
+                    <br />
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section" name="menu_section" section="general">
+                            <a name="menu-head" ng-click="toggeldv()" class="nav-head active-head">
+                                <h3>General</h3><span style="margin-top: -10px;" class="fa fa-chevron-right extra-right"></span>
+                            </a>
+                            <div name="menu-child" class="menu-child">
+                                <ul class="nav side-menu" id="menu">
+                                    <li>
+                                        <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Home/Dashboard" name="dashboard" title="action">Dashboard</a></li>
+                                            <li><a href="../Home/GetUserObjectSession" name="sessiondetail" title="action">Sesstion Detail</a></li>
+                                            <li><a href="../Home/Backend" name="dashboard" title="action">Create Backend</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-edit"></i> Registration<span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Registration/FacultyRegistration" title="action">Faculty</a></li>
+                                            <li><a href="../Registration/StudentRegistration" title="action">Student</a></li>
+                                            <li><a href="../Registration/DriverRegistration" title="action">Other Staff</a></li>
+                                            <li><a href="../QuickRegistration/QuickRegister" title="action">Quick Registration</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-desktop"></i> Reports <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Reports/Student" title="action">Student(s)</a></li>
+                                            <li><a href="../Reports/Attendence" title="action">Attendence</a></li>
+                                            <li><a href="../Reports/Faculty" title="action">Faculties</a></li>
+                                            <li><a href="../Reports/Stuff" title="action">Staff member(s)</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-table"></i> Events <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Events/Timetable" title="action">Time table</a></li>
+                                            <li><a href="../Events/Calender" title="action">Calender</a></li>
+                                            <li><a href="../Events/Projects" title="action">Project</a></li>
+                                            <li><a href="../Events/Contacts" title="action">Contacts</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-bar-chart-o"></i> Vehicle Tracking <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Tracking/Vehicles" title="action">Vehicle(s)</a></li>
+                                            <li><a href="../Tracking/GMap" title="action">Map</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-clone"></i>Master Data <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../AdminMaster/ViewClasses" title="action">View Classes</a></li>
+                                            <li><a href="../AdminMaster/ViewAddSubjects" title="action">Subject(s)</a></li>
+                                            <li><a href="../UploadExcel/Viewdroppickzone" title="action">Upload Records</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-bug"></i> Result <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Result/viewresult" title="action">View result</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="menu_section" name="menu_section" section="accounts">
+                            <a name="menu-head" ng-click="toggeldv()" class="nav-head active-head">
+                                <h3>Accounts</h3><span style="margin-top: -10px;" class="fa fa-chevron-right extra-right"></span>
+                            </a>
+                            <div name="menu-child" class="menu-child" style="display: none;">
+                                <ul class="nav side-menu">
+                                    <li>
+                                        <a><i class="fa fa-windows"></i> Accounts <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Accounts/index" title="action">View Payments</a></li>
+                                            <li><a href="../Accounts/Payments" name="payments" title="action">Payments</a></li>
+                                            <li><a href="../Accounts/ViewFees" name="viewfees" title="action">View Fees</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-sitemap"></i> Salary & Groth <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Accounts/Salaries" title="action">Salary</a></li>
+                                            <li><a href="../Accounts/Incomes" title="action">Income</a></li>
+                                            <li><a href="../Accounts/ProfitAndLoss" title="action">Profit And Loss</a></li>
+                                            <li><a href="../Accounts/GrothRate" title="action">Groth Rate</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-sitemap"></i> Tax & Deduction <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../Accounts/Tax" title="action">Calculate Tax</a></li>
+                                            <li><a href="../Accounts/Savings" title="action">My Savings</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="menu_section" name="menu_section" section="goods">
+                            <a name="menu-head" ng-click="toggeldv()" class="nav-head active-head">
+                                <h3>Live On</h3><span style="margin-top: -10px;" class="fa fa-chevron-right extra-right"></span>
+                            </a>
+                            <div name="menu-child" class="menu-child" style="display: none;">
+                                <ul class="nav side-menu">
+                                    <li>
+                                        <a><i class="fa fa-sitemap"></i> Goods & Items <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../GoodsReport/AddVendor" title="action">Add Vendor</a></li>
+                                            <li><a href="../GoodsReport/AddClient" title="action">Add Clients</a></li>
+                                            <li><a href="../GoodsReport/AddGoods" title="action">Add Goods</a></li>
+                                            <li><a href="../GoodsReport/AddEditGoodsItem" title="action">Add GoodsItem</a></li>
+                                            <li><a href="../GoodsReport/AvailableGoods" title="action">Available Goods</a></li>
+                                            <li><a href="../GoodsReport/Vender" title="action">Vendors</a></li>
+                                            <li><a href="../GoodsReport/Client" title="action">Clients</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a><i class="fa fa-sitemap"></i> Do Sell <span class="fa fa-chevron-right extra-right"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="../SellGoods/SellNow" title="action">Sell item</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="javascript:void(0)" title="action"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /sidebar menu -->
+                    <!-- /menu footer buttons -->
+                    <div class="sidebar-footer hidden-small">
+                        <a data-toggle="tooltip" data-placement="top" title="Settings">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Lock">
+                            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                        </a>
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="javascript:void(0)" ng-click="LogoutUser()">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <!-- /menu footer buttons -->
+                </div>
+            </div>
+
+            <!-- top navigation -->
+            <div class="top_nav">
+                <div class="nav_menu">
+                    <nav>
+                        <div class="nav toggle">
+                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                        </div>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="images/img.jpg" alt="">{{UserBO.FirstName}} {{UserBO.LastName}}
+                                    <span class=" fa fa-angle-down"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li><a href="javascript:;"> Profile</a></li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <span class="badge bg-red pull-right">50%</span>
+                                            <span>Settings</span>
+                                        </a>
+                                    </li>
+                                    <li><a href="javascript:;">Help</a></li>
+                                    <li><a href="javascript:void(0)" ng-click="LogoutUser()"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                </ul>
+                            </li>
+                            <li role="presentation" class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-envelope-o"></i>
+                                    <span class="badge bg-green">6</span>
+                                </a>
+                                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                    <li>
+                                        <a>
+                                            <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                                            <span>
+                                                <span>John Smith</span>
+                                                <span class="time">3 mins ago</span>
+                                            </span>
+                                            <span class="message">
+                                                Film festivals used to be do-or-die moments for movie makers. They were where...
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                                            <span>
+                                                <span>John Smith</span>
+                                                <span class="time">3 mins ago</span>
+                                            </span>
+                                            <span class="message">
+                                                Film festivals used to be do-or-die moments for movie makers. They were where...
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                                            <span>
+                                                <span>John Smith</span>
+                                                <span class="time">3 mins ago</span>
+                                            </span>
+                                            <span class="message">
+                                                Film festivals used to be do-or-die moments for movie makers. They were where...
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                                            <span>
+                                                <span>John Smith</span>
+                                                <span class="time">3 mins ago</span>
+                                            </span>
+                                            <span class="message">
+                                                Film festivals used to be do-or-die moments for movie makers. They were where...
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="text-center">
+                                            <a>
+                                                <strong>See All Alerts</strong>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- /top navigation -->
+            <div ng-click="CloseDynamic()">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <!-- Bootstrap -->
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="~/Scripts/commonscript.js"></script>
+    <script src="~/Scripts/loader.js"></script>
+
+    <!-- FastClick -->
+    <script src="~/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="~/vendors/nprogress/nprogress.js"></script>
+    <!-- iCheck -->
+    <script src="~/vendors/iCheck/icheck.min.js"></script>
+    <!-- Chart.js -->
+    <script src="~/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="~/vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="~/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- Skycons -->
+    <script src="~/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="~/vendors/Flot/jquery.flot.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="~/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="~/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="~/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="~/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="~/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="~/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="~/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="~/vendors/moment/min/moment.min.js"></script>
+    <script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- bootstrap-datetimepicker -->
+    <script src="~/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="~/Scripts/custom.js"></script>
+    <script>
+        $('[data-toggle="tooltip"]').tooltip()
+        $('#myDatepicker').datetimepicker();
+
+        $('#myDatepicker2').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+
+        $('#myDatepicker3').datetimepicker({
+            format: 'hh:mm A'
+        });
+
+        $('#myDatepicker4').datetimepicker({
+            ignoreReadonly: true,
+            allowInputToggle: true
+        });
+
+        $('#datetimepicker6').datetimepicker();
+
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false
+        });
+
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    </script>
+</body>
+</html>

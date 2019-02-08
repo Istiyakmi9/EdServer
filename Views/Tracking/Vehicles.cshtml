@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Vehicles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="vehicles">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Vehilce reports </h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <p>Vehicle <code>tracking</code> report by driver uid.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+                            <tr class="headings">
+                                <th class="column-title">Name </th>
+                                <th class="column-title">Mobile no. </th>
+                                <th class="column-title">Vehicle </th>
+                                <th class="column-title">Vehicle no. </th>
+                                <th class="column-title">Fuel Type </th>
+                                <th class="column-title">Registration no. </th>
+                                <th class="column-title no-link last">
+                                    <span class="nobr">Action</span>
+                                </th>
+                                <th class="bulk-actions" colspan="7">
+                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="even pointer" ng-repeat="item in RecordsArray">
+                                <td class="row-data">{{item.FullName}}</td>
+                                <td class="row-data">{{item.MobileNumber}}</td>
+                                <td class="row-data">{{item.vehicleName}}</td>
+                                <td class="row-data">{{item.vehicleNumber}}</td>
+                                <td class="row-data">{{item.fueltype}}</td>
+                                <td class="a-right a-right">{{item.vehicleRegistrationNo}}</td>
+                                <td class="last">
+                                    <a href="#">View</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="dataTables_info" id="datatable_info" role="status" aria-live="polite">
+                            Showing {{fromCount}} to {{toCount}} of {{recordDetail.total}} entries
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="paging-dv">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var Data = @Html.Raw(@ViewBag.Vehicles);
+</script>
+<script src="~/Scripts/vehicles.js"></script>

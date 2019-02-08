@@ -1,0 +1,356 @@
+﻿.attedence {
+    border-collapse: collapse;
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+    height: 430px;
+    overflow-y: hidden;
+}
+
+.atthead {
+    background-color: #4e667d;
+    color: #eee;
+}
+
+.atthead {
+    display: block;
+}
+
+.attbody {
+    display: block;
+}
+
+#tblattedence tbody {
+    overflow-y: auto;
+    overflow-x: hidden;
+    /*height: auto;*/
+    position: relative;
+    height: 88%;
+}
+
+#tblattedence td {
+    min-width: 50px;
+    height: 25px;
+    border: 1px solid lightblue;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+#tblattedence th {
+    min-width: 50px;
+    height: 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.attedence td {
+    text-align: center;
+}
+
+.v-fixed {
+    overflow-x: hidden;
+    border-bottom: 17px solid #efefef;
+}
+
+    .v-fixed tbody {
+        overflow: hidden;
+        margin-top: 0px;
+        height: 801px !important;
+    }
+
+.last-section > div {
+    width: 60px;
+}
+
+.last-section-hd > div {
+    width: 60px;
+    margin-left: -6px !important;
+}
+
+.even {
+    background-color: #fff;
+}
+
+#tblattedence th div {
+    padding: 5px 0px;
+}
+
+.well-date {
+    min-height: 20px;
+    padding: 0px;
+    margin-bottom: 15px;
+}
+
+.demotd {
+    text-align: center;
+    height: 200px;
+    margin-top: 200px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+
+/*---------------------------------------- New Design -----------------------*/
+
+
+.tbl-dv {
+}
+
+.head-left-panel {
+    width: 30%;
+    border: 1px solid #d9d9d9;
+    display: table-cell;
+}
+
+.head-panel-right {
+    width: 70%;
+    overflow: hidden;
+    display: table-cell;
+}
+
+.scroller-dv-header {
+    overflow-x: auto;
+}
+
+.scroller-dv {
+    overflow-x: auto;
+    height: 400px;
+}
+
+.head-content {
+    width: 180%;
+    border: 1px solid #d9d9d9;
+}
+
+.head-cell {
+    border: 1px solid #d9d9d9;
+}
+
+.cells {
+    width: 66px;
+    display: table-cell;
+    border: 1px solid #d9d9d9;
+}
+
+.cell-border {
+    border: 1px solid #d9d9d9;
+}
+
+.head-left-cell-1 {
+    width: 196px;
+    display: table-cell;
+}
+
+.head-left-cell-2 {
+    width: 100px;
+    display: table-cell;
+}
+
+.head-left-cell-3 {
+    width: 100px;
+    display: table-cell;
+}
+
+.cell-data {
+    width: 30px;
+}
+
+.scrollable-section {
+    height: 425px;
+    overflow-y: auto;
+}
+
+.scroll-space {
+    overflow-y: scroll;
+    margin-bottom: 0px;
+    height: 35px !important;
+    padding-bottom: 0px;
+}
+
+.default-msg-dv {
+    text-align: center;
+    position: relative;
+    font-size: 18px;
+}
+
+    .default-msg-dv > i {
+        font-size: 40px;
+        position: relative;
+        left: -12px;
+        top: 16px;
+        color: #2c4054;
+    }
+
+.flex-dv {
+    display: block;
+    border-right: 1px solid #d9d9d9;
+    padding-left: 0px;
+}
+
+
+.payment-card {
+    width: 24%;
+    border: 1px solid #d9d9d9;
+    display: inline-block;
+    margin-top: 8px;
+    box-shadow: 0px 4px 6px -2px #d9d9d9;
+    min-height: 84px;
+    border-radius: 4px;
+}
+
+    .payment-card div {
+        padding-left: 10px;
+    }
+
+.card-title {
+    padding: 8px 0px;
+    text-align: center;
+    margin: 0px;
+}
+
+    .card-title > b {
+        text-decoration: underline;
+    }
+
+.card-content p {
+    padding: 0px;
+    margin: 0px;
+}
+
+.card-content {
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.extra-padding-left {
+    margin-left: 8px;
+}
+
+.extra-padding-right {
+    margin-right: 8px;
+}
+
+.extra-padding-both {
+    margin: 0px 8px;
+}
+
+.card-action {
+    text-align: right;
+    margin-bottom: 2px;
+}
+
+    .card-action i {
+        padding-right: 8px;
+    }
+
+.card-info {
+    margin: 10px 0px;
+    border: 1px solid #d9d9d9;
+    text-align: center;
+    padding: 10px;
+    background-color: #fff9f9;
+    color: #2c4054;
+    width: 96%;
+}
+
+.card-table {
+    border-top: 1px solid #d9d9d9;
+    padding: 0px;
+    padding-top: 14px;
+    margin-bottom: 0px;
+}
+
+.payment-sum {
+    position: relative;
+    top: 6px;
+    text-align: center;
+}
+
+.table-responsive {
+    border-bottom: 1px solid #d9d9d9;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.corner-checkbox {
+    position: absolute;
+    margin-left: 16px;
+}
+
+.Card-mini-title {
+    text-align: center;
+    margin-top: 36px;
+    margin-bottom: 18px;
+    text-decoration: underline;
+}
+
+.payment-info {
+    padding-top: 12px;
+    text-align: center;
+    font-weight: bold;
+    color: #2c4054;
+    text-decoration: underline;
+}
+
+.block-dv {
+    display: block !important;
+    position: absolute;
+    background-color: rgba(238, 238, 238, 0.87);
+    width: 23%;
+    height: 27%;
+    text-align: center;
+    padding-top: 10%;
+    z-index: 1000;
+    color: black;
+}
+
+    .block-dv p {
+        font-weight: bold;
+        transform: rotate(-40deg);
+        font-size: 20px;
+    }
+
+.first-cell {
+    width: 200px !important;
+    text-align: left;
+    padding-left: 6px !important;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.head-title {
+    line-height: 38px;
+    padding-left: 10px !important;
+}
+
+.filter-btn-dv {
+    margin-top: 21px;
+    padding-right: 0px;
+}
+
+.clear-btn-dv {
+    margin-top: 21px;
+    padding-right: 0px;
+}
+
+.success {
+    color: #444;
+}
+
+.danger {
+    background-color: #df7d7d;
+    color: #eee;
+}
+
+.t-h {
+    height: 410px;
+}
+
+.t-scroll-color::-webkit-scrollbar-track {
+    background: #283e56 !important;
+}

@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "ViewAddSubjects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main" ng-controller="master">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="modal fade" id="addclassmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Class Modal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="confirmMsg">
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Add Subjects<small>school total subject(s) entry.</small></h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <br />
+                                        <form class="form-horizontal form-label-left input_mask">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" id="tgirls">
+                                                    Subject Name&nbsp;<span>*</span>
+                                                </label>
+                                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                                    <input type="text" class="form-control" ng-focus="RemoveErrorBorder()" required="required" id="subjectname" placeholder="Name of the subject">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                                    Subject Code&nbsp;<span>*</span>
+                                                </label>
+                                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                                    <input type="text" class="form-control" ng-focus="RemoveErrorBorder()" required="required" id="subjectcode" placeholder="Subject code">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                                    Credit Value
+                                                </label>
+                                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                                    <input type="number" class="form-control" required="required" id="credit" placeholder="Credit value">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="AddSubject()">Save Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>School class <small>View class and section</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Settings 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Settings 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="actionBar d-flex" style="border:none;">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                @*<label for="subjectname">Subject Name</label>*@
+                                <input type="text" class="form-control" id="subjectname" placeholder="Subject name" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                @*<label for="subjectcode">Subject Code</label>*@
+                                <input type="text" class="form-control" id="subjectcode" placeholder="Subject Code" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                @*<label for="credit">Credit</label>*@
+                                <input type="text" id="credit" placeholder="Credit" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                @*<label for="action">Action</label>*@
+                                <div id="action">
+                                    <a href="javascript:void(0)" id="nextbtn" ng-click="nextStep()" class="buttonNext btn btn-success">Filter</a>
+                                    <a href="javascript:void(0)" id="prevbtn" ng-click="addNew()" class="buttonPrevious btn btn-primary">Add New</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped jambo_table bulk_action">
+                        <thead>
+                            <tr class="headings">
+                                <th class="column-title"># Index</th>
+                                <th class="column-title">Subject Name </th>
+                                <th class="column-title">Subject Code</th>
+                                <th class="column-title">Credit</th>
+                                <th class="column-title">Last Updated On</th>
+                                <th class="column-title no-link last">
+                                    <span class="nobr">Action</span>
+                                </th>
+                                <th class="bulk-actions" colspan="7">
+                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="even pointer" ng-repeat="item in SubjectArray">
+                                <td class="row-data">{{$index + 1}}</td>
+                                <td class="row-data">{{item.SubjectName}}</td>
+                                <td class="row-data">{{item.SubjectCode}}</td>
+                                <td class="row-data">{{item.Credit}}</td>
+                                <td class="row-data">{{item.LastUpdatedOn}}</td>
+                                <td class="last action">
+                                    <input type="hidden" name="classid" value="{{item.SubjectId}}" />
+                                    <a href="javascript:void(0)" data-toggle="tooltip" title="Edit item" ng-click="EditCurrentItem()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <a href="javascript:void(0)" data-toggle="tooltip" title="Delete item" ng-click="DeleteCurrentItem()"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 d-flex">
+                        <div class="pagination-text col-md-4 container-fluid no-margin" id="datatable_info" role="status" aria-live="polite">
+                            Showing {{fromCount}} to {{toCount}} of {{recordDetail.total}} entries
+                        </div>
+                        <nav aria-label="..." class="col-md-8 container-fluid no-margin">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <span class="page-link">Previous</span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active">
+                                    <span class="page-link">
+                                        2
+                                        <span class="sr-only">(current)</span>
+                                    </span>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="paging-dv">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var Data = "";
+    var Type = @Html.Raw(@ViewBag.Type);
+    if (typeof @Html.Raw(@ViewBag.Subjects) != "undefined")
+        Data = @Html.Raw(@ViewBag.Subjects);
+    else
+        Data = "";
+</script>
+<script src="~/Scripts/admin-master.js"></script>
+

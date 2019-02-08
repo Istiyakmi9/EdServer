@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewBag.Title = "ViewFees";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/fees.css" rel="stylesheet" />
+<div class="right_col" role="main" ng-controller="ViewFeesCtrl">
+    <div class="container-fluid">
+        <input type="hidden" id="Finetype" value="normal" />
+        <input type="hidden" id="CurrentEditSchoolFeeId" value="normal" />
+        <input type="hidden" id="CurrentEditFees" value="normal" />
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Add Fees<small>Add new fees structur</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 border pt-3 pb-3">
+                <form class="form-inline">
+                    <div class="form-group mr-3">
+                        <label for="class"><i class="fa fa-bell"></i>&nbsp;Class&nbsp; </label>
+                        <select id="class" class="form-control" style="width: 100px;" ng-click="EnableField()">
+                            <option value="">Class</option>
+                            <option ng-repeat="item in ClassDetail" value="{{item}}">{{item}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group mr-3">
+                        <label for="class"><i class="fa fa-inr"></i>&nbsp;Late fine&nbsp; </label>
+                        <div class="input-group" style="margin-bottom: initial;">
+                            <input type="text" id="latefineamount" placeholder="Fine in (Rs)" ng-click="EnableField()" style="width: 100px;" class="form-control" />
+                            <div class="input-group-btn" id="latefinetype">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    <span name="actiontxt">Fine</span> <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:void(0)" ng-click="Applyaction()" name="Normal Fine">Fine</a></li>
+                                    <li><a href="javascript:void(0)" ng-click="Applyaction()" name="/Day">/Day</a></li>
+                                    <li><a href="javascript:void(0)" ng-click="Applyaction()" name="/Month">/Month</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mr-3">
+                        <label for="amount"><i class="fa fa-inr"></i>&nbsp;Fees &nbsp; </label>
+                        <input class="form-control" id="amount" placeholder="Fees in (Rs.)" ng-click="EnableField()" style="width: 110px;" />
+                    </div>
+                    <div class="form-group">
+                        <label for="lastday"><i class="fa fa-calendar-check-o"></i>&nbsp;Last Date&nbsp; </label>
+                        <select id="lastday" class="form-control" ng-click="EnableField()" style="width: 120px;">
+                            <option value="">Last Day</option>
+                            <option value="1st week">1st week</option>
+                            <option value="2nd week">2nd week</option>
+                            <option value="3rd week">3rd week</option>
+                            <option ng-repeat="item in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                                    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]" value="{{item}}">
+                                {{item | GetMonthPrefix}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group pull-right">
+                        <button class="btn btn-primary" ng-click="AddNewFeestructure()">
+                            <i class="fa fa-plus"></i>
+                            Add new
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="x_panel">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 border pt-3">
+                <div class="table-responsive">
+                    <div class="x_title">
+                        <form class="form-inline">
+                            <div class="form-group mr-3">
+                                <label for="filterclass">Class </label>
+                                <select id="filterclass" class="form-control" style="width: 200px;">
+                                    <option value="">Class</option>
+                                    <option ng-repeat="item in ClassDetail" value="{{item}}">{{item}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="filteramount">Amount </label>
+                                <input class="form-control" placeholder="Amount" id="filteramount" style="width: 200px;" />
+                            </div>
+                            <div class="form-group pull-right">
+                                <button class="btn btn-default" ng-click="FilterRecord()">
+                                    <i class="fa fa-filter"></i>
+                                    Filter record(s)
+                                </button>
+                            </div>
+                        </form>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="">
+                        <div ng-switch="RecordAvailable" id="timetable-body">
+                            <div class="table-responsive" id="viewfeestimetable-dv" style="display: none;" ng-switch-when="1">
+                                <div class="dyn-table">
+                                    <div>Class</div>
+                                    <div>Fees Code</div>
+                                    <div>Amount</div>
+                                    <div>Last Date </div>
+                                    <div>Modified On</div>
+                                    <div>Action</div>
+                                </div>
+                                <div class="dyn-body">
+                                    <div ng-repeat="item in FeesResult track by $index" name="table" class="dyn-body-item" ng-class="{'t-striped': $odd}">
+                                        <div name="class" class="pl-3" value="{{item.Class}}">Class: {{item.Class}}</div>
+                                        <div name="feecode" class="pl-3" value="{{item.FeeCode}}">{{item.FeeCode}}</div>
+                                        <div name="amount" class="pl-3" value="{{item.Amount}}"><i class="fa fa-inr"></i>&nbsp;{{item.Amount}}</div>
+                                        <div name="lastpaymentdate" class="pl-3" value="{{item.LastPaymentDate}}">{{item.LastPaymentDate | GetMonthPrefix}} of every month</div>
+                                        <div name="modifiedon" class="pl-3" value="{{item.UpdatedOn}}">
+                                            <div ng-switch="item.UpdatedOn">
+                                                <span ng-switch-when="null">NA</span>
+                                                <span ng-switch-default>{{item.UpdatedOn | limitTo: 10}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="pl-3">
+                                            <a href="javascript:void(0)" class="tbl-action-icon-style" style="margin-right: 10px;" ng-click="EditCurrentRecord()"><i class="fa fa-pencil-square-o"></i></a>
+                                            <a href="javascript:void(0)" class="tbl-action-icon-style" ng-click="DeleteCurrentRecord()"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                        <input type="hidden" name="schoolfeedetailid" value="{{item.SchoolFeeDetailId}}" />
+                                        <input type="hidden" name="latefinetype" value="{{item.LateFineType}}" />
+                                        <input type="hidden" name="latefineamount" value="{{item.LateFineAmount}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-switch-default class="default-msg-dv">
+                                <div id="default-msg" style="display: none;">
+                                    <i class="fa fa-filter" ng-show="SearchResult"></i>
+                                    <i class="fa fa-exclamation-triangle" style="color: red;" ng-show="!SearchResult"></i>
+                                    {{DefaultMessage}}<br />
+                                    <small ng-show="SearchResult"><i>Press Filter button to process filtering.</i></small>
+                                    <small ng-show="!SearchResult" style="color: red;"><i>Error encountered.</i></small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="animationload" id="loader" style="display: none;">
+                            <div class="osahanloading">
+                            </div>
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/fees.js"></script>
+    <script type="text/javascript">
+        var Data = @Html.Raw(@ViewBag.FeesDetail)
+    </script>
+</div>

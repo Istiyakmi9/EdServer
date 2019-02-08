@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "EditGoodsItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="right_col" role="main">
+    <div ng-controller="EditGoodsItemCtrl" id="client">
+        <div class="clearfix"></div>
+        <div class="row" id="goodsitem">
+            <div class="col-md-12 col-xs-12 x_panel">
+                <div class="x_title" style="margin-bottom: 35px;">
+                    <a>Available Goods</a><i class="fa fa-double-arrow-right"></i>
+                    <span>AddEdit GoodsItem</span>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Goods & Item details. <small>Company & brand related info.</small></h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br />
+                            <form class="form-horizontal form-label-left input_mask">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Item</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="item" name="item" class="form-control" ng-keyup="validateInput()"
+                                               placeholder="Item" ng-model="client.Item" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Item Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="ItemName" name="ItemName" class="form-control" ng-keyup="validateInput()"
+                                               placeholder="Item Name" ng-model="client.ItemName" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Company Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="ItemCompanyName" name="ItemCompanyName" class="form-control" ng-keyup="validateInput()"
+                                               placeholder="Company Name" ng-model="client.ItemCompanyName" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">HSNCode</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="HSNCode" name="HSNCode" class="form-control" ng-keyup="validateInput()"
+                                               placeholder="HSNCode" ng-model="client.HSNCode" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Seles Price</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="salePrice" name="salePrice" class="form-control" ng-keyup="validateInput()"
+                                               ng-keypress="maskmobile()" placeholder="Seles Price" ng-model="client.salePrice" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Pch. Price</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="PurchasedPrice" name="PurchasedPrice" class="form-control" ng-keyup="validateInput()"
+                                               ng-keypress="maskmobile()" placeholder="Purchased Price (if any)" ng-model="client.PurchasedPrice" value="" validate="1">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Other information <small>Like Price, GST no. etc.</small></h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <br />
+                            <form class="form-horizontal form-label-left input_mask">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">MRP</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="MRP" name="MRP" class="form-control" ng-keyup="validateInput()"
+                                               ng-keypress="maskmobile()" placeholder="MRP" ng-model="client.MRP" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Unit</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="Unit" name="Unit" class="form-control" ng-keyup="validateInput()"
+                                               ng-keypress="maskmobile()" placeholder="Unit" ng-model="client.Unit" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">M-Quantity</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="M_Qty" name="M_Qty" class="form-control" ng-keyup="validateInput()"
+                                               ng-keypress="maskmobile()" placeholder="Meter Quantity" ng-model="client.M_Qty" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Discount</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="Discount" name="Discount" class="form-control" ng-keyup="validateInput()"
+                                               ng-keypress="maskmobile()" placeholder="Discount (if any)" ng-model="client.Discount" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">GST no.</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="GST" name="GST" class="form-control" ng-keyup="validateInput()"
+                                               placeholder="GST no" ng-model="client.GST" value="" validate="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Batch no.</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="text" id="BatchNo" name="BatchNo" class="form-control" ng-keyup="validateInput()"
+                                               placeholder="Batch no. (if any)" ng-model="client.BatchNo" value="" validate="1">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="actionBar" style="float: left;margin-top: 50px;">
+                    <input type="hidden" ng-model="client.GoodsItemUid" id="ClientUid" name="VendorUId" value="" />
+                    <a href="javascript:void(0)" id="nextbtn" ng-click="resetall('goodsitem')" class="buttonNext btn btn-success">Reset</a>
+                    <a href="javascript:void(0)" id="prevbtn" ng-click="UpdateRecord()" class="buttonPrevious btn btn-primary">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var Data = @Html.Raw(@ViewBag.Result)
+</script>
+<script src="~/Scripts/editgoods.js"></script>

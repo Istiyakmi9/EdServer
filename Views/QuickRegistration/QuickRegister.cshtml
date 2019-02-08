@@ -1,0 +1,280 @@
+﻿
+@{
+    ViewBag.Title = "Student";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<link href="~/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<link href="~/Content/studentreg.css" rel="stylesheet" />
+<div class="right_col" role="main">
+    <div ng-controller="QuickRegistration" id="studentRegistration">
+        <div class="clearfix"></div>
+        <div class="modal fade" id="quickpopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Quickt Registration Modal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="regmsg"></div>
+                        <div id="errormsg" style="text-align: center;color: red;font-weight: bold;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="btnOk" class="btn btn-primary" ng-click="GotoReportsPage()" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Student Registration</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#">Settings 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="col-md-2 col-sm-2 col-xs-12 profile_left">
+                            <div class="profile_img" style="margin-top: 25px;">
+                                <div id="crop-avatar" class="page-init" style="height: 150px;">
+                                    <!-- Current avatar -->
+                                    <img class="img-responsive avatar-view" id="profileImgUrl" ng-src="{{ImageUrl}}" alt="Avatar" title="Change the avatar">
+                                </div>
+                            </div>
+                            <h3 style="font-size: 20px;" class="page-init">{{firstName}} {{lastName}}</h3>
+                            <input type="file" value="" name="profileImage" id="profileImage" style="display: none;" />
+                            <a class="btn btn-success" ng-click="getImage()" style="width: 100%;">
+                                <i class="fa fa-edit m-right-xs"></i>Browse image
+                            </a>
+                        </div>
+                        <div class="col-md-10 col-sm-10 col-xs-12">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_content">
+                                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                        <ul id="myTab1" class="nav nav-tabs bar_tabs right" role="tablist">
+                                            <li role="presentation" name="student" class="active">
+                                                <a href="#tab_content11" name="tab_student" ng-click="activetab()" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">
+                                                    Student Registration
+                                                </a>
+                                            </li>
+                                            <li role="presentation" name="faculty" class="">
+                                                <a href="#tab_content22" role="tab" ng-click="activetab()" name="tab_faculty" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                                    Faculty Registration
+                                                </a>
+                                            </li>
+                                            <li role="presentation" name="driver" class="">
+                                                <a href="#tab_content33" role="tab" ng-click="activetab()" name="tab_staff" data-toggle="tab" aria-controls="profile" aria-expanded="false">
+                                                    Staff Registration
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div id="myTabContent2" style="min-height: 250px;" class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade active in" id="tab_student" name="quick-tabs" aria-labelledby="home-tab">
+                                                <div class="x_title new-setting">
+                                                    <h2>User Activity Report</h2>
+                                                    <ul class="nav navbar-right panel_toolbox" style="margin-top: 10px;margin-right:-25px;">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                                <i class="fa fa fa-clone" style="color: #444;"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                                <li>
+                                                                    <a ng-click="enablenew()">Enter new entry</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a ng-click="enableexisting()">Select existing name</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <!-- start of user-activity-graph -->
+                                                <div id="perent-existing-dv" class="col-md-12 col-sm-12 col-xs-12 quickperient-existing-dv">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" style="padding-top: 6px;">
+                                                        Gurdian mobile no. <span class="required">*</span>
+                                                    </label>
+                                                    <div class="form-group col-md-9 col-sm-9 col-xs-12">
+                                                        <div class='input-group date' id='mob'>
+                                                            <input class="date-picker form-control col-md-7 col-xs-12" id="ExistingNumber" name="ExistingNumber"
+                                                                   ng-keyup="findParent()" required type="text" placeholder="Enter Father/Mother mobile no."
+                                                                   ng-keypress="maskmobile()" ng-model="student.ExistingNumber">
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-phone"></span>
+                                                            </span>
+                                                        </div>
+                                                        <div class="quickfilterdd dynamic" id="ddlfilter" style="display: none;">
+                                                            <div class="arrow-top pull-right"></div>
+                                                            <table class="table table-striped studlist">
+                                                                <tbody>
+                                                                    <tr ng-show="parentList.length > 0" ng-repeat="record in parentList track by $index" ng-click="selectUser()">
+                                                                        <td class="filtertxt" scope="row">
+                                                                            <span name="mobile">{{record.MobileNo}}</span>
+                                                                            <input type="hidden" name="mobileUid" value="{{record.ParentId}}" />
+                                                                        </td>
+                                                                        <td><span name="fullname">{{record.FullName}}</span></td>
+                                                                    </tr>
+                                                                    <tr ng-show="parentList.length == 0">
+                                                                        <td colspan="2" style="text-align: center;">No data found</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="new_parentdetail" class="col-md-12 col-sm-12 col-xs-12 form-group" style="display: none;">
+                                                    <div class="col-md-8 col-sm-8 col-xs-12 form-group has-feedback">
+                                                        <input type="text" class="form-control has-feedback-left" id="fathername" name="fathername"
+                                                               ng-keyup="validateField()" ng-model="fatherName" placeholder="Father full name">
+                                                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+                                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                                        <input type="text" class="form-control has-feedback-left" id="Fathermobileno" name="Fathermobileno"
+                                                               ng-keyup="validateField()" ng-model="student.Fathermobileno" ng-keypress="maskmobile()"
+                                                               placeholder="Student Mobile no.">
+                                                        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group" id="g-dv">
+                                                        <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                                            <input type="text" class="form-control has-feedback-left" id="studentfirstname" name="studentfirstname"
+                                                                   ng-keyup="validateField()" ng-model="student.FirstName" placeholder="Student first name">
+                                                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                                            <input type="text" class="form-control has-feedback-left" id="studentlastname" name="studentlastname"
+                                                                   ng-keyup="validateField()" ng-model="student.LastName" placeholder="Student last name">
+                                                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                                            <input type="text" class="form-control has-feedback-left" id="studentmobile" name="studentmobile"
+                                                                   ng-keyup="validateField()" ng-model="student.Mobilenumber" ng-keypress="maskmobile()"
+                                                                   placeholder="Student Mobile no.">
+                                                            <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" name="quick-tabs" class="tab-pane fade" id="tab_faculty" aria-labelledby="profile-tab">
+                                                <div class="x_title new-setting">
+                                                    <h2>Faculty Quick Registration</h2>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <!-- start of user-activity-graph -->
+                                                <div id="perient-existing-dv" class="col-md-12 col-sm-12 col-xs-12 quickperient-existing-dv">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" style="padding-top: 6px;">
+                                                        Mobile No. <span class="required">*</span>
+                                                    </label>
+                                                    <div class="form-group col-md-9 col-sm-9 col-xs-12">
+                                                        <div class='input-group date' id='mob'>
+                                                            <input class="date-picker form-control col-md-7 col-xs-12" id="FacultyMobileNumber" name="FacultyMobileNumber"
+                                                                   required type="text" placeholder="Enter your mobile no."
+                                                                   ng-model="Staffs.MobileNumber" ng-keypress="maskmobile()">
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-phone"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" style="visibility:hidden;">
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group" id="g-dv">
+                                                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                                            <input type="text" class="form-control has-feedback-left" id="FacultyFirstName" name="FacultyFirstName"
+                                                                   ng-keyup="validateField()" ng-model="Staffs.FirstName" placeholder="Faculty first name">
+                                                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                        </div>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                                            <input type="text" class="form-control has-feedback-left" id="FacultyLastName" name="FacultyLastName"
+                                                                   ng-keyup="validateField()" ng-model="Staffs.LastName" placeholder="Faculty last name">
+                                                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" name="quick-tabs" class="tab-pane fade" id="tab_staff" aria-labelledby="profile-tab">
+                                                <div class="x_title new-setting">
+                                                    <h2>Other StaffMember(s) Quick Registration</h2>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <!-- start of user-activity-graph -->
+                                                <div id="perient-existing-dv" class="col-md-12 col-sm-12 col-xs-12 quickperient-existing-dv">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" style="padding-top: 6px;">
+                                                        Mobile No. <span class="required">*</span>
+                                                    </label>
+                                                    <div class="form-group col-md-9 col-sm-9 col-xs-12">
+                                                        <div class='input-group date' id='mob'>
+                                                            <input class="date-picker form-control col-md-7 col-xs-12" id="StaffMobileNumber" name="StaffMobileNumber"
+                                                                   required type="text" placeholder="Enter Father/Mother mobile no."
+                                                                   ng-model="Staffs.MobileNumber" ng-keypress="maskmobile()">
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-phone"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" style="visibility:hidden;">
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group" id="g-dv">
+                                                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                                            <input type="text" class="form-control has-feedback-left" id="StaffFirstName" name="StaffFirstName"
+                                                                   ng-keyup="validateField()" ng-model="Staffs.FirstName" placeholder="Staff first name">
+                                                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                        </div>
+                                                        <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                                            <input type="text" class="form-control has-feedback-left" id="StaffLastName" name="StaffLastName"
+                                                                   ng-keyup="validateField()" ng-model="Staffs.LastName" placeholder="Staff last name">
+                                                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="actionBar">
+                                            <a href="javascript:void(0)" id="nextbtn" ng-click="resetall()" class="buttonNext btn btn-success">Reset</a>
+                                            <a href="javascript:void(0)" id="prevbtn" ng-click="registerNow()" style="margin-right: 15px;"
+                                               class="buttonPrevious btn btn-primary">Submit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var StudentData = @Html.Raw(@ViewBag.StudentData)
+</script>
+<script src="~/Scripts/quickregistration.js"></script>
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/raphael/raphael.min.js"></script>

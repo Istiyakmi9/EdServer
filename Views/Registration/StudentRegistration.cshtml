@@ -1,0 +1,509 @@
+﻿
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<link href="~/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<link href="~/Content/studentreg.css" rel="stylesheet" />
+<div class="right_col" role="main">
+    <div ng-controller="studentRegistration" id="studentRegistration">
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Student Registration</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="#">Settings 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Settings 2</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="col-md-2 col-sm-2 col-xs-12 profile_left">
+                            <div class="profile_img full">
+                                <div id="crop-avatar">
+                                    <!-- Current avatar -->
+                                    <img class="img-responsive avatar-view" id="profileImgUrl" style="display:none;" ng-src="{{studForm.ImageUrl}}" alt="Avatar" title="Change the avatar" />
+                                    <img class="img-responsive avatar-view" id="profileImgUrl-demo" src="~/images/picture.png" alt="Avatar" title="Change the avatar" />
+                                </div>
+                            </div>
+                            <h3 style="font-size: 20px;" class="page-init full">{{userFirstName}} {{userLastName}}</h3>
+                            <input type="file" class="full" value="" name="profileImage" id="profileImage" style="display: none;" />
+                            <a class="btn btn-success full" ng-click="getImage()"><i class="fa fa-edit m-right-xs"></i>Browse image</a>
+                        </div>
+                        <div class="col-md-10 col-sm-10 col-xs-12">
+                            <div class="x_title new-setting">
+                                <h2>User Activity Report</h2>
+                                <ul id="parent-dv-ul" class="nav navbar-right panel_toolbox" style="margin-top: 10px;margin-right:-25px;">
+                                    <li class="dropdown" style="display: none;" id="parentInfoSelection" ng-if="!IsUpdating">
+                                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            <i class="fa fa fa-clone" style="color: #444;"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a ng-click="enablenew()">Enter new entry</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="enableexisting()">Select existing name</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li name="edit-enable" style="margin-right: 36px;" ng-if="IsUpdating" disabled>
+                                        <a href="javascript:void(0)">
+                                            <span style="color:#989898">Edit Parent Detail&nbsp;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!-- start of user-activity-graph -->
+                            @*<div id="graph_bar" style="width:100%; height:280px;"></div>*@
+                            <div class="perient-sel-dv" id="perient-sel-dv">
+                                <p class="p-title">Please confirm one of the below option</p>
+                                <div>
+                                    <div id="user-dv" class="pull-right" style="width: 100%;">
+                                        <label style="margin-right: 70px;margin-left: 10px;">
+                                            <input type="checkbox" id="newparient" ng-model="newparent" name="newparient" ng-change="enablenew()" class="sel-parent">
+                                            &nbsp;Enter new entry
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" ng-model="existparent" id="existingparient" name="existingparient" ng-change="enableexisting()" class="sel-parent">
+                                            &nbsp;Select existing name
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="errorgurdianmsg" style="display: none;color: red; font-weight: bold; text-align: center;">
+                                    Please select one of above option & fill the form.
+                                </div>
+                            </div>
+                            <div id="perient-existing-dv" class="col-md-9 col-sm-9 col-xs-12 perient-existing-dv" style="display:none;">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" style="padding-top: 6px;">
+                                    Enter mobile no. <span class="required">*</span>
+                                </label>
+                                <div class="form-group">
+                                    <div class='input-group date' id='mob'>
+                                        <input class="date-picker form-control col-md-7 col-xs-12" id="existingNumber" name="existingNumber" ng-keyup="findParent()"
+                                               required type="text" placeholder="Enter mobile no." ng-keypress="maskmobile()">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-phone"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="filterdd" id="ddlfilter" style="display: none;">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="filtertxt">Mobile no#</th>
+                                                <th>Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="record in parentList track by $index" ng-click="selectNumber()">
+                                                <th class="filtertxt" scope="row">
+                                                    <span name="mobile">{{record.MobileNo}}</span>
+                                                    <input type="hidden" name="mobile" value="{{record.ParentId}}" />
+                                                    <input type="hidden" id="existingmobileno" />
+                                                </th>
+                                                <td><span name="fullname">{{record.FullName}}</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="parent-dv" id="parent-dv" style="display:none;">
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Fatherfullname" name="Fatherfullname" ng-keyup="validateField()"
+                                               placeholder="Father full name" ng-model="FatherFullName" title="Father full name">
+                                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="email" class="form-control has-feedback-left" id="Fatheremailid" name="Fatheremailid" ng-keyup="validateField()"
+                                               placeholder="Father email id" ng-model="studForm.Fatheremailid" title="Father email id">
+                                        <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Fathermobileno" name="Fathermobileno" ng-keyup="validateField()"
+                                               ng-keypress="maskmobile()" placeholder="Father no." ng-model="studForm.Fathermobileno" title="Father mobile no">
+                                        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Fatheroccupation" name="Fatheroccupation" ng-keyup="validateField()"
+                                               placeholder="Father occupation" ng-model="studForm.Fatheroccupation" title="Father occupation" ng-click="ShowDynamicDDOptions()">
+                                        <div class="selection-dd dn" name="selection-dd" style="margin-top: 0px;">
+                                            <div ng-repeat="occ in Occupation">
+                                                <a href="javascript:void(0)" ng-click="SelectCurrentFatherOccupation()">{{occ}}</a>
+                                            </div>
+                                        </div>
+                                        <span class="fa fa-desktop form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Fatherqualification" name="Fatherqualification" ng-keyup="validateField()"
+                                               placeholder="Father qualification" ng-model="studForm.Fatherqualification" title="Father qualification" ng-click="ShowDynamicDDOptions()">
+                                        <div class="selection-dd dn" name="selection-dd" style="margin-top: 0px;">
+                                            <div ng-repeat="qual in Qualification">
+                                                <a href="javascript:void(0)" ng-click="SelectCurrentFatherQualificatoin()">{{qual}}</a>
+                                            </div>
+                                        </div>
+                                        <span class="fa fa-desktop form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Motherfullname" name="Motherfullname" ng-keyup="validateField()"
+                                               placeholder="Mother full name" ng-model="MotherFullName" title="Mother full name">
+                                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Motheremailid" name="Motheremailid" ng-keyup="validateField()"
+                                               placeholder="Mother email id" ng-model="studForm.Motheremailid" title="Mother email id">
+                                        <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Mothermobileno" name="Mothermobileno" ng-keyup="validateField()"
+                                               ng-keypress="maskmobile()" placeholder="Mother no." ng-model="studForm.Mothermobileno" title="Mother mobile no">
+                                        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Motheroccupation" name="Motheroccupation" ng-keyup="validateField()"
+                                               placeholder="Mother occupation" ng-model="studForm.Motheroccupation" title="Mother occupation" ng-click="ShowDynamicDDOptions()">
+                                        <div class="selection-dd dn" name="selection-dd" style="margin-top: 0px;">
+                                            <div ng-repeat="occ in Occupation">
+                                                <a href="javascript:void(0)" ng-click="SelectCurrentMotherOccupation()">{{occ}}</a>
+                                            </div>
+                                        </div>
+                                        <span class="fa fa-desktop form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Motherqualification" name="Motherqualification" ng-keyup="validateField()"
+                                               placeholder="Mother qualification" ng-model="studForm.Motherqualification" title="Mother qualification" ng-click="ShowDynamicDDOptions()">
+                                        <div class="selection-dd dn" name="selection-dd" style="margin-top: 0px;">
+                                            <div ng-repeat="qual in Qualification">
+                                                <a href="javascript:void(0)" ng-click="SelectCurrentMotherQualificatoin()">{{qual}}</a>
+                                            </div>
+                                        </div>
+                                        <span class="fa fa-desktop form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-sm-9 col-xs-12" style="margin-top: 8px;padding-left: 38px;">
+                                    <label>
+                                        <input type="checkbox" ng-model="confirmed" name="guardiandetail" ng-change="change()" class="">
+                                        &nbsp;Enter Local Guardian detail
+                                    </label>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group" id="g-dv" style="display:none;">
+                                    <div class="col-md-5 col-sm-5 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Guradinfullname" name="Guradinfullname" ng-keyup="validateField()"
+                                               placeholder="Full name" ng-model="studForm.LocalGuardianFullName" title="Local Guardian full name">
+                                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Gurdainemailid" name="Gurdainemailid" ng-keyup="validateField()"
+                                               placeholder="Email id" ng-model="studForm.LocalGuardianemailid" title="Local Guardian email id">
+                                        <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="Gurdainnumber" name="Gurdainnumber" ng-keyup="validateField()"
+                                               ng-keypress="maskmobile()" placeholder="Mobile number" ng-model="studForm.LocalGuardianMobileno" title="Local Guardian mobil no">
+                                        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end of user-activity-graph -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Student detail <small>Fill student personal</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <form class="form-horizontal form-label-left input_mask">
+                            <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <input type="text" class="form-control has-feedback-left" id="FirstName" name="FirstName" ng-keyup="validateField()"
+                                       placeholder="Student First Name" ng-model="studForm.FirstName" value="">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <input type="text" class="form-control" id="LastName" name="LastName" ng-keyup="validateField()"
+                                       placeholder="Student Last Name" ng-model="studForm.LastName" value="">
+                                <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <input type="text" class="form-control has-feedback-left" id="EmailId" name="EmailId" ng-keyup="validateField()"
+                                       placeholder="Email" ng-model="studForm.EmailId" value="">
+                                <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <input type="text" class="form-control" id="Mobilenumber" name="Mobilenumber" ng-keyup="validateField()"
+                                       ng-keypress="maskmobile()" placeholder="Mobile number" ng-model="studForm.Mobilenumber" value="">
+                                <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                            </div>
+                            <div class="form-group dn">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Registration no.</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="text" readonly="readonly" id="RegistrationNo" name="RegistrationNo" class="form-control"
+                                           placeholder="xxxxxxxxxxxxxxx" ng-model="studForm.RegistrationNo" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select class="form-control col-md-4 col-xs-4" type="select" id="Category" name="Category"
+                                            ng-click="DDlvalidateField()" ng-model="studForm.Category" value="">
+                                        <option selected="selected" value="">Select catagory</option>
+                                        <option value="General">General</option>
+                                        <option value="OBC">OBC</option>
+                                        <option value="S.C">S.C</option>
+                                        <option value="S.T">S.T</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Religion</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select class="form-control col-md-4 col-xs-4" type="select" id="Religion" name="Religion"
+                                            ng-click="DDlvalidateField()" ng-model="studForm.Religion" value="">
+                                        <option selected="selected" value="">Select religion</option>
+                                        <option value="Hindu">Hindu</option>
+                                        <option value="Muslim">Muslim</option>
+                                        <option value="Christian">Christian</option>
+                                        <option value="Sikh">Sikh</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Date of birth</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <div class="form-group">
+                                        <div class='input-group date' id='myDatepicker'>
+                                            <input id="Dob" name="Dob" ng-blur="EnableDob()" class="date-picker form-control col-md-7 col-xs-12"
+                                                   required type="text" ng-model="studForm.Dob" value="">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Age <span class="required">*</span></label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="number" name="Age" id="Age" ng-keyup="validateField()" readonly
+                                           class="form-control col-md-10" ng-model="studForm.Age" value="" />
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 26px;">
+                                <label class="col-md-3 col-sm-3 col-xs-12 control-label">
+                                    Gender
+                                </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12" style="margin-top: 8px;">
+                                    Male <input type="radio" ng-model="male" class="flat" name="genderM" ng-change="changeGender()" id="genderM" style="margin-right: 15px;" />
+                                    &emsp;
+                                    Female <input type="radio" ng-model="female" class="flat" name="genderF" ng-change="changeGender()" id="genderF" />
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Student other details <small>school related details</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <form class="form-horizontal form-label-left" style="margin-top: 6px;">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    Mother tongue
+                                </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="text" name="mothertongue" id="mothertongue" ng-model="studForm.MotherTongue"
+                                           ng-click="ShowDynamicDDOptions()" ng-keypress="OnlyChar()"
+                                           class="form-control col-md-10" placeholder="Mother tongue" />
+                                    <div class="selection-dd dn" name="selection-dd">
+                                        <div ng-repeat="lang in languages" ng-click="SelectCurrentLanguage()">
+                                            <a href="javascript:void(0)">{{lang}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select class="form-control col-md-4 col-xs-4" type="select" id="State" ng-model="studForm.State" name="State" ng-click="DDlvalidateField()">
+                                        <option selected="selected" value="">Select state</option>
+                                        <option value="Bihar">Bihar</option>
+                                        <option value="West Bangal">West Bangal</option>
+                                        <option value="Jharkhand">Jharkhand</option>
+                                        <option value="UP">UP</option>
+                                        <option value="Odisha">Odisha</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select id="City" name="City" class="form-control col-md-4 col-xs-4" ng-model="studForm.City" type="select" ng-click="DDlvalidateField()">
+                                        <option selected="selected" value="">Select city</option>
+                                        <option value="Bihar">Bihar</option>
+                                        <option value="West Bangal">West Bangal</option>
+                                        <option value="Jharkhand">Jharkhand</option>
+                                        <option value="UP">UP</option>
+                                        <option value="Odisha">Odisha</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Class</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select class="form-control" ng-model="studForm.Class" ng-change="BindSection()" id="Class" name="Class">
+                                        <option value="">Choose Class</option>
+                                        <option ng-repeat="item in ClassDetail" value="{{item}}">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Section</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select class="form-control" ng-model="SelectedSection" ng-change="BindSectionValue()" id="section" name="section">
+                                        <option value="">Choose Section</option>
+                                        <option ng-repeat="sec in SectionDetail" value="{{sec.ClassDetailId}}">{{sec.Section}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 4px;">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <textarea type="text" class="form-control" rows="4" ng-keyup="validateField()" ng-model="studForm.Address" id="Address" name="Address"
+                                              placeholder="Address"></textarea>
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Student other details. (if any) <small>Fill student personal</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br />
+                        <div class="form-group" style="margin-bottom: 50px;">
+                            <div class="col-sm-6 col-md-6 col-xs-12">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Last school name </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="text" name="lastschoolName" id="lastschoolName" ng-model="studForm.LastSchoolName" ng-keyup="validateField()"
+                                           placeholder="Last school name" class="form-control col-md-10" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-xs-12">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">School full address </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="text" name="schooladdress" id="schooladdress" ng-model="studForm.PSAddress" ng-keyup="validateField()"
+                                           placeholder="School address" class="form-control col-md-10" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6 col-md-6 col-xs-12">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Mediun of instruction </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="text" name="psmedium" id="psmedium" ng-keyup="validateField()" placeholder="Medium" ng-model="studForm.PSMedium" class="form-control col-md-10" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-xs-12">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Class studing now </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select class="form-control" ng-model="studForm.LastClass" ng-change="BindSection()" id="classstuding" name="classstuding">
+                                        <option value="">Choose Last Class</option>
+                                        <option ng-repeat="item in ClassDetail" value="{{item}}">{{item}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="x_title" style="padding-top: 150px;">
+                        <h2>Brother or Sister detail styding in this school. (if any) <small>Fill student personal</small></h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content" id="siblingdv" ng-click="hideReference()">
+
+                    </div>
+                    <div class="row" style="text-align: right;padding-right: 5px;">
+                        <button type="button" id="addsibling" class="btn btn-primary" ng-click="addsibling()" data-dismiss="modal">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="studregpp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Student Registration Modal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="regmsg"></div><br />
+                        <div id="extra-mobile-error" style="color: red;"></div>
+                        <div id="extra-email-error" style="color: red;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="btnOk" class="btn btn-primary" ng-click="gotoStudentViewPage()" data-dismiss="modal">Ok</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="actionBar" style="border: none;">
+            <a href="javascript:void(0)" id="nextbtn" ng-click="resetall()" class="buttonNext btn btn-success">Reset</a>
+            <a href="javascript:void(0)" id="prevbtn" ng-click="registerNow()" class="buttonPrevious btn btn-primary">Submit</a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var StudentData = @Html.Raw(@ViewBag.StudentData)
+</script>
+<script src="~/Scripts/studentreg.js"></script>
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<script src="~/vendors/raphael/raphael.min.js"></script>
